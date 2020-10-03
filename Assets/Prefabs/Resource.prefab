@@ -8,10 +8,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7153718938488202286}
-  - component: {fileID: 1717896528910635960}
-  - component: {fileID: 5964420653779166615}
-  - component: {fileID: 4352980975283254926}
+  - component: {fileID: 1123637642287779670}
+  - component: {fileID: 4482386388628587172}
+  - component: {fileID: 4551457837016004202}
+  - component: {fileID: 7101558651100534058}
   m_Layer: 0
   m_Name: Resource
   m_TagString: resource
@@ -71,7 +71,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: f64dda7b0704b164f9b4060c3b27a92f, type: 3}
   m_Color: {r: 1, g: 0.9023488, b: 0.0047169924, a: 1}
   m_FlipX: 0
@@ -83,7 +83,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &5964420653779166615
+--- !u!61 &4551457837016004202
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -109,7 +109,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &4352980975283254926
+--- !u!114 &7101558651100534058
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
