@@ -6,6 +6,7 @@
   "editor.defaultFormatter": "Leopotam.csharpfixformat",
   "csharp.format.enable": false,
   "files.exclude": {
+    "**/Plugins": true,
     "**/.DS_Store": true,
     "**/.git": true,
     "**/.gitignore": false,
@@ -45,7 +46,7 @@
     "**/*.cubemap": true,
     "**/*.flare": true,
     "**/*.mat": true,
-    "**/*.meta": false,
+    "**/*.meta": true,
     "**/*.prefab": false,
     "**/*.unity": false,
     "build/": true,
