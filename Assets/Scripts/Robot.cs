@@ -6,11 +6,11 @@ public class Robot : MonoBehaviour {
     public Vector3 direction = Vector3.zero, target = Vector3.zero;
     public float maxSpeed;
     float speed;
-    protected static Vector3 north = new Vector3(0, 1, 0);
-    protected static Vector3 east = new Vector3(1, 0, 0);
-    protected static Vector3 south = new Vector3(0, -1, 0);
-    protected static Vector3 west = new Vector3(-1, 0, 0);
-    protected static Vector3[] directions = new Vector3[] { north, east, south, west };
+    public static readonly Vector3 north = new Vector3(0, 1, 0);
+    public static readonly Vector3 east = new Vector3(1, 0, 0);
+    public static readonly Vector3 south = new Vector3(0, -1, 0);
+    public static readonly Vector3 west = new Vector3(-1, 0, 0);
+    public static readonly Vector3[] directions = new Vector3[] { north, east, south, west };
 
     List<Instruction> instructions = new List<Instruction>();
 
