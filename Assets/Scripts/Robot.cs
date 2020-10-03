@@ -19,11 +19,11 @@ public class Robot : MonoBehaviour {
 
     // Start is called before the first frame update
     protected void Start() {
-        Commander.AddCommand(this, Command.MoveEast, Predicate.Always, "");
-        Commander.AddCommand(this, Command.MoveNorth, Predicate.XLessThan, "1.5");
-        Commander.AddCommand(this, Command.MoveWest, Predicate.Always, "");
-        Commander.AddCommand(this, Command.MoveEast, Predicate.Always, "");
-        Commander.AddCommand(this, Command.MoveEast, Predicate.Always, "");
+        Commander.AddCommand(this, Command.MoveEast, Predicate.Always, "", "");
+        Commander.AddCommand(this, Command.MoveNorth, Predicate.XLessThan, "1.5", "");
+        Commander.AddCommand(this, Command.MoveWest, Predicate.Always, "", "");
+        Commander.AddCommand(this, Command.MoveEast, Predicate.Always, "", "");
+        Commander.AddCommand(this, Command.MoveEast, Predicate.Always, "", "");
     }
 
     public void AddInstruction(Instruction instruction) {

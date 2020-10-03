@@ -9,7 +9,7 @@ public abstract class Instruction {
   protected string predicateParam;
   protected string actionParam;
   protected Func<Robot, string, bool> predicate { get; set; }
-  public abstract void Run(Robot robot, string actionParam);
+  public abstract void Run(Robot robot);
 }
 
 public interface PredicateFn {
@@ -21,8 +21,8 @@ public class PrintInstruction : Instruction {
   {
   }
 
-  public override void Run(Robot robot, string actionParam) {
-    if (predicate.Invoke(robot, param)) {
+  public override void Run(Robot robot) {
+    if (predicate.Invoke(robot, actionParam)) {
       Console.WriteLine("Print X");
     }
   }
@@ -33,8 +33,8 @@ public class MoveEastInstruction : Instruction {
   {
   }
 
-  public override void Run(Robot robot, string actionParam) {
-    if (predicate.Invoke(robot, param)) {
+  public override void Run(Robot robot) {
+    if (predicate.Invoke(robot, actionParam)) {
       robot.MoveEast();
     }
   }
@@ -45,8 +45,8 @@ public class MoveWestInstruction : Instruction {
   {
   }
 
-  public override void Run(Robot robot, string actionParam) {
-    if (predicate.Invoke(robot, param)) {
+  public override void Run(Robot robot) {
+    if (predicate.Invoke(robot, actionParam)) {
       robot.MoveWest();
     }
   }
@@ -57,8 +57,8 @@ public class MoveNorthInstruction : Instruction {
   {
   }
 
-  public override void Run(Robot robot, string actionParam) {
-    if (predicate.Invoke(robot, param)) {
+  public override void Run(Robot robot) {
+    if (predicate.Invoke(robot, actionParam)) {
       robot.MoveNorth();
     }
   }
@@ -69,8 +69,8 @@ public class MoveSouthInstruction : Instruction {
   {
   }
 
-  public override void Run(Robot robot, string actionParam) {
-    if (predicate.Invoke(robot, param)) {
+  public override void Run(Robot robot) {
+    if (predicate.Invoke(robot, actionParam)) {
       robot.MoveSouth();
     }
   }
@@ -81,9 +81,13 @@ public class JumpInstruction : Instruction {
   {
   }
 
-  public override void Run(Robot robot, string actionParam) {
-    if (predicate.Invoke(robot, param)) {
-      robot.SetInstruction(Int32.Parse(actionParam));
+  public override void Run(Robot robot) {
+    if (predicate.Invoke(robot, actionParam)) {
+      int lineNumber = 0;
+      if(Int32.TryParse(actionParam, out lineNumber)) {
+        robot.SetCurrentLine(lineNumber);   
+      }
+      
     }
   }
 }

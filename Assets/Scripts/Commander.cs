@@ -7,24 +7,24 @@ public static class Commander {
   public static Func<Robot, string, bool> RobotYLessThan = (Robot robot, string param) => robot.transform.position.y < float.Parse(param);
   public static Func<Robot, string, bool> RobotYMoreThan = (Robot robot, string param) => robot.transform.position.y > float.Parse(param);
 
-  public static void AddCommand(Robot robot, Command command, Predicate predicateEnum, string param) {
+  public static void AddCommand(Robot robot, Command command, Predicate predicateEnum, string predicateParam, string actionParam) {
 
     var predicate = GetPredicate(predicateEnum);
     switch(command) {
       case Command.Print:
-        robot.AddInstruction(new PrintInstruction(predicate, ""));
+        robot.AddInstruction(new PrintInstruction(predicate, "", ""));
         break;
       case Command.MoveEast:
-        robot.AddInstruction(new MoveEastInstruction(predicate, param));
+        robot.AddInstruction(new MoveEastInstruction(predicate, predicateParam, ""));
         break;
       case Command.MoveWest:
-        robot.AddInstruction(new MoveWestInstruction(predicate, param));
+        robot.AddInstruction(new MoveWestInstruction(predicate, predicateParam, ""));
         break;
       case Command.MoveNorth:
-        robot.AddInstruction(new MoveNorthInstruction(predicate, param));
+        robot.AddInstruction(new MoveNorthInstruction(predicate, predicateParam, ""));
         break;
       case Command.MoveSouth:
-        robot.AddInstruction(new MoveSouthInstruction(predicate, param));
+        robot.AddInstruction(new MoveSouthInstruction(predicate, predicateParam, ""));
         break;
     }
   }
