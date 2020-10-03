@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,10 +21,9 @@ public class Robot : MonoBehaviour {
     // Start is called before the first frame update
     protected void Start() {
         Commander.AddCommand(this, Command.MoveEast, Predicate.Always, "", "");
-        Commander.AddCommand(this, Command.MoveNorth, Predicate.XLessThan, "1.5", "");
-        // Commander.AddCommand(this, Command.MoveWest, Predicate.Always, "", "");
-        // Commander.AddCommand(this, Command.MoveEast, Predicate.Always, "", "");
-        // Commander.AddCommand(this, Command.MoveEast, Predicate.Always, "", "");
+        Commander.AddCommand(this, Command.Print, Predicate.Always, "", "First Line");
+        Commander.AddCommand(this, Command.Jump, Predicate.Always, "", "0");
+        Commander.AddCommand(this, Command.Print, Predicate.Always, "", "Final Line");
     }
 
     public void AddInstruction(Instruction instruction) {
@@ -57,15 +57,22 @@ public class Robot : MonoBehaviour {
             return;
         }
 
+        Debug.Log(" CurrentLine: " + currentLine);
+
         timeStep = 0;
 
-        if (instructions.Count > 0) {
-            var instruction = instructions[currentLine];
+        if (instructions.Count <= 0) {
+            return;
+        }
+        
+        var instruction = instructions[currentLine];
+        instruction.Run(this);
+        if (instruction is JumpInstruction) {
 
-            instruction.Run(this);
+        } else {
+            currentLine++;
         }
 
-        currentLine++;
         if (currentLine >= instructions.Count) {
             currentLine = 0;
         }

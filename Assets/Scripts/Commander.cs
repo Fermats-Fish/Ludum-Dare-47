@@ -14,7 +14,7 @@ public static class Commander {
     var predicate = GetPredicate(predicateEnum);
     switch(command) {
       case Command.Print:
-        robot.AddInstruction(new PrintInstruction(predicate, "", ""));
+        robot.AddInstruction(new PrintInstruction(predicate, "", actionParam));
         break;
       case Command.MoveEast:
         robot.AddInstruction(new MoveEastInstruction(predicate, predicateParam, ""));
@@ -27,6 +27,9 @@ public static class Commander {
         break;
       case Command.MoveSouth:
         robot.AddInstruction(new MoveSouthInstruction(predicate, predicateParam, ""));
+        break;
+      case Command.Jump:
+        robot.AddInstruction(new JumpInstruction(predicate, predicateParam, actionParam));
         break;
     }
   }
@@ -62,5 +65,6 @@ public enum Command {
   MoveEast,
   MoveNorth,
   MoveWest,
-  MoveSouth
+  MoveSouth,
+  Jump,
 };

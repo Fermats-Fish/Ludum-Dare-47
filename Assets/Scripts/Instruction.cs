@@ -1,4 +1,6 @@
+
 using System;
+using UnityEngine;
 
 public abstract class Instruction {
   public Instruction(Func<Robot, string, bool> predicate, string predicateParam, string actionParam) {
@@ -23,7 +25,7 @@ public class PrintInstruction : Instruction {
 
   public override void Run(Robot robot) {
     if (predicate.Invoke(robot, predicateParam)) {
-      Console.WriteLine("Print X");
+      Debug.Log(actionParam);
     }
   }
 }
@@ -81,13 +83,12 @@ public class JumpInstruction : Instruction {
   {
   }
 
-  public override void Run(Robot robot) {
+  public override void Run(Robot robot) {;
     if (predicate.Invoke(robot, predicateParam)) {
       int lineNumber = 0;
       if(Int32.TryParse(actionParam, out lineNumber)) {
         robot.SetCurrentLine(lineNumber);   
       }
-      
     }
   }
 }
