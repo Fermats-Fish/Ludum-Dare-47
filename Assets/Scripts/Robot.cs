@@ -21,9 +21,9 @@ public class Robot : MonoBehaviour {
     protected void Start() {
         Commander.AddCommand(this, Command.MoveEast, Predicate.Always, "", "");
         Commander.AddCommand(this, Command.MoveNorth, Predicate.XLessThan, "1.5", "");
-        Commander.AddCommand(this, Command.MoveWest, Predicate.Always, "", "");
-        Commander.AddCommand(this, Command.MoveEast, Predicate.Always, "", "");
-        Commander.AddCommand(this, Command.MoveEast, Predicate.Always, "", "");
+        // Commander.AddCommand(this, Command.MoveWest, Predicate.Always, "", "");
+        // Commander.AddCommand(this, Command.MoveEast, Predicate.Always, "", "");
+        // Commander.AddCommand(this, Command.MoveEast, Predicate.Always, "", "");
     }
 
     public void AddInstruction(Instruction instruction) {

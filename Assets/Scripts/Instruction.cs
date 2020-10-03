@@ -22,7 +22,7 @@ public class PrintInstruction : Instruction {
   }
 
   public override void Run(Robot robot) {
-    if (predicate.Invoke(robot, actionParam)) {
+    if (predicate.Invoke(robot, predicateParam)) {
       Console.WriteLine("Print X");
     }
   }
@@ -34,7 +34,7 @@ public class MoveEastInstruction : Instruction {
   }
 
   public override void Run(Robot robot) {
-    if (predicate.Invoke(robot, actionParam)) {
+    if (predicate.Invoke(robot, predicateParam)) {
       robot.MoveEast();
     }
   }
@@ -46,7 +46,7 @@ public class MoveWestInstruction : Instruction {
   }
 
   public override void Run(Robot robot) {
-    if (predicate.Invoke(robot, actionParam)) {
+    if (predicate.Invoke(robot, predicateParam)) {
       robot.MoveWest();
     }
   }
@@ -58,7 +58,7 @@ public class MoveNorthInstruction : Instruction {
   }
 
   public override void Run(Robot robot) {
-    if (predicate.Invoke(robot, actionParam)) {
+    if (predicate.Invoke(robot, predicateParam)) {
       robot.MoveNorth();
     }
   }
@@ -70,7 +70,7 @@ public class MoveSouthInstruction : Instruction {
   }
 
   public override void Run(Robot robot) {
-    if (predicate.Invoke(robot, actionParam)) {
+    if (predicate.Invoke(robot, predicateParam)) {
       robot.MoveSouth();
     }
   }
@@ -82,7 +82,7 @@ public class JumpInstruction : Instruction {
   }
 
   public override void Run(Robot robot) {
-    if (predicate.Invoke(robot, actionParam)) {
+    if (predicate.Invoke(robot, predicateParam)) {
       int lineNumber = 0;
       if(Int32.TryParse(actionParam, out lineNumber)) {
         robot.SetCurrentLine(lineNumber);   
