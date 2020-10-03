@@ -46,6 +46,10 @@ public class Robot : MonoBehaviour {
         MoveDirection(Robot.west);
     }
 
+    public void SetCurrentLine(int line) {
+        currentLine = line;
+    }
+
     // Update is called once per frame
     protected void Update() {
         if (timeStep < GameController.instance.timeStep) {
