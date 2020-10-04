@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Robot : Entity {
 
-    public bool running = true;
+    bool ignition = false;
+    public bool running = false;
     int actionsSinceSlowAction = 0;
 
     public int directionFacing = 3;
@@ -18,6 +19,8 @@ public class Robot : Entity {
     List<FunctionInstance> instructions = new List<FunctionInstance>();
 
     bool hasResource = false;
+
+    bool error = false;
 
     SpriteRenderer sr;
 
@@ -71,11 +74,14 @@ public class Robot : Entity {
         programText = program;
     }
 
-    static readonly Color resourceColor = new Color(1f, 1f, 0f);
+    static readonly Color resourceColor = new Color(0.7f, 0.7f, 0f);
     static readonly Color normalColor = new Color(91 / 255f, 87 / 255f, 245 / 255f);
+    static readonly Color errorColor = new Color(1f, 20 / 255f, 30 / 255f);
 
     public void UpdateColor() {
-        if (hasResource) {
+        if (error) {
+            sr.color = errorColor;
+        } else if (hasResource) {
             sr.color = resourceColor;
         } else {
             sr.color = normalColor;
@@ -121,11 +127,26 @@ public class Robot : Entity {
 
     protected override void RunProgram() {
 
+        error = false;
+
         if (instructions.Count == 0) {
             running = false;
         }
 
+        if (running && !ignition) {
+            // Turn off if we are now back at base and there is no ignition.
+            if (curPos == basePos) {
+                running = false;
+
+                // Also drop off any resource we are carrying.
+                if (hasResource) {
+                    hasResource = false;
+                }
+            }
+        }
+
         if (!running) {
+            UpdateColor();
             return;
         }
 
@@ -138,34 +159,34 @@ public class Robot : Entity {
             instruction.Evaluate();
         } catch (RunTimeError e) {
             Debug.Log("Runtime error: " + e.Message + "!");
+            error = true;
         } catch (System.Exception e) {
             Debug.Log("Runtime error!");
+            error = true;
         }
 
         currentLine += 1;
 
         transform.rotation = rotations[directionFacing];
 
-        if (!instruction.IsSlowAction()) {
+        // Recursive section.
+        if (!instruction.IsSlowAction() && !error && actionsSinceSlowAction < 100) {
             actionsSinceSlowAction += 1;
-            if (actionsSinceSlowAction >= 100) {
-                Debug.Log("Infinite loop detected! - Line " + currentLine);
-                actionsSinceSlowAction = 0;
-            } else {
-                RunProgram();
-            }
-        } else {
-            actionsSinceSlowAction = 0;
+            RunProgram();
         }
 
-        // Turn off if we are going back to base.
-        if (target == basePos) {
-            running = false;
+        // Finishing off (only run once) section.
+        else {
+            if (actionsSinceSlowAction >= 100) {
+                Debug.Log("Infinite loop detected! - Line " + currentLine);
+                error = true;
+            }
+            actionsSinceSlowAction = 0;
 
-            // Also drop off any resource we are carrying.
-            if (hasResource) {
-                hasResource = false;
-                UpdateColor();
+            UpdateColor();
+
+            if (ignition) {
+                ignition = false;
             }
         }
 
@@ -180,6 +201,7 @@ public class Robot : Entity {
     public void TurnOn() {
         currentLine = 0;
         running = true;
+        ignition = true;
     }
 
     public override void Die() {
