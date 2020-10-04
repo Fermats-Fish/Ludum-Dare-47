@@ -68,14 +68,14 @@ public class Robot : Entity {
 
     protected override void RunProgram() {
 
+        if (currentLine > instructions.Count || currentLine < 0) {
+            currentLine = 0;
+        }
+
         var instruction = instructions[currentLine];
         instruction.Evaluate();
 
         currentLine += 1;
-
-        if (currentLine >= instructions.Count) {
-            currentLine = 0;
-        }
 
         transform.rotation = rotations[directionFacing];
 
