@@ -82,7 +82,7 @@ public class Function : Evaluatable {
             }
 
             if (range > GameController.instance.gridSize.x + GameController.instance.gridSize.y) {
-                throw new Exception("Couldn't find closest thing");
+                throw new RunTimeError("Couldn't find closest thing");
             }
         }
     }

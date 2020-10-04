@@ -134,7 +134,13 @@ public class Robot : Entity {
         }
 
         var instruction = instructions[currentLine];
-        instruction.Evaluate();
+        try {
+            instruction.Evaluate();
+        } catch (RunTimeError e) {
+            Debug.Log("Runtime error: " + e.Message + "!");
+        } catch (System.Exception e) {
+            Debug.Log("Runtime error!");
+        }
 
         currentLine += 1;
 
