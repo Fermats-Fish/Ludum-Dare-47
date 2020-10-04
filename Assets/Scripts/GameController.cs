@@ -10,7 +10,7 @@ public class GameController : MonoBehaviour {
     public List<Entity> entities;
 
     Dictionary < (int, int), Resource > resources;
-    public const float timeStep = 0.2f;
+    public const float timeStep = 0.6f;
     float time = timeStep;
 
     public GameObject robotPrefab, floorPrefab, wallPrefab, resourcePrefab, enemyPrefab;
