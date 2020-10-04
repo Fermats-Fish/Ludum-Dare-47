@@ -40,6 +40,7 @@ public class UIController : MonoBehaviour {
 
     public void OnTypeProgram() {
         compileButtonText.text = "Compile";
+        Compile();
     }
 
     public void StartRobot() {
