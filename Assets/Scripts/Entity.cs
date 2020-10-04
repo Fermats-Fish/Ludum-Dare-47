@@ -46,11 +46,11 @@ public class Entity : MonoBehaviour {
         target = (curPos.x + dirCoord.x, curPos.y + dirCoord.y);
 
         if (target.x < 0) {
-            target.x += GameController.instance.gridSize.x - 1;
+            target.x += GameController.instance.gridSize.x;
         }
 
         if (target.y < 0) {
-            target.y += GameController.instance.gridSize.y - 1;
+            target.y += GameController.instance.gridSize.y;
         }
 
         if (target.x >= GameController.instance.gridSize.x) {
