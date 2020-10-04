@@ -37,6 +37,32 @@ public class Function : Evaluatable {
         return new CoordValue(GameController.BoundRelPos(coord));
     }
 
+    static(int x, int y) FromRelCoord(Robot robot, (int x, int y) coord) {
+
+        // First rotate.
+
+        // South means flip both. Also flip if west since flip plus rotate clockwise = rotate anticlockwise.
+        if (robot.directionFacing == 2 || robot.directionFacing == 3) {
+            coord.x = -coord.x;
+            coord.y = -coord.y;
+        }
+
+        // East means rotate clockwise. Same for west since if west we already flipped.
+        if (robot.directionFacing == 1 || robot.directionFacing == 3) {
+            var y = coord.y;
+            coord.y = -coord.x;
+            coord.x = y;
+        }
+
+        // Now translate
+        coord.x += robot.curPos.x;
+        coord.y += robot.curPos.y;
+
+        // Finally bound
+        return GameController.Bound(coord);
+
+    }
+
     static CoordValue GetClosest(Robot robot, Func < (int, int), bool > predicate) {
         if (predicate(robot.curPos)) {
             return new CoordValue(0, 0);
@@ -44,23 +70,18 @@ public class Function : Evaluatable {
         int range = 0;
         while (true) {
             range += 1;
-            for (int x = -range; x <= range; x++) {
-                foreach (int y in new int[] {-range, range }) {
-                    var coord = GameController.Bound(robot.curPos.x + x, robot.curPos.y + y);
+            for (int y = range; y >= -range; y--) {
+                var absY = y > 0 ? y : -y;
+                foreach (int x in new int[] {-range + absY, range - absY }) {
+                    // This is a relative coordinate. We need to convert from it to a real coord.
+                    var coord = FromRelCoord(robot, (x, y));
                     if (predicate(coord)) {
-                        return ToRelCoord(robot, coord);
+                        return new CoordValue(GameController.BoundRelPos(x, y));
                     }
                 }
             }
-            for (int y = -(range - 1); y <= range - 1; y++) {
-                foreach (int x in new int[] {-range, range }) {
-                    var coord = GameController.Bound(robot.curPos.x + x, robot.curPos.y + y);
-                    if (predicate(coord)) {
-                        return ToRelCoord(robot, coord);
-                    }
-                }
-            }
-            if (range > 1000) {
+
+            if (range > GameController.instance.gridSize.x + GameController.instance.gridSize.y) {
                 throw new Exception("Couldn't find closest thing");
             }
         }
@@ -224,7 +245,6 @@ public class Function : Evaluatable {
 
             // Slow actions
             new SlowActionFunc("MoveForward", 0, (Robot robot, Value[] args) => {
-                Debug.Log("Move");
                 robot.MoveForward();
             }),
             new SlowActionFunc("MoveDirection", 1, (Robot robot, Value[] args) => {
