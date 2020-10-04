@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class Robot : Entity {
 
+    int actionsSinceSlowAction = 0;
+
     public int directionFacing = 3;
     public(int x, int y) basePos;
+
+    public bool lastIfEvaluated = true;
 
     // List<Instruction> instructions = new List<Instruction>();
     List<FunctionInstance> instructions = new List<FunctionInstance>();
@@ -26,10 +30,8 @@ public class Robot : Entity {
         // AddInstruction("TurnRight");
         // AddInstruction("MoveForward");
         AddInstruction("If LessThan 0 GetYCoordOf GetBasePos");
-        AddInstruction("Goto 3");
-        AddInstruction("Goto 5");
         AddInstruction("MoveForward");
-        AddInstruction("Goto 0");
+        AddInstruction("Else");
         AddInstruction("TurnRight");
 
     }
@@ -70,5 +72,16 @@ public class Robot : Entity {
         }
 
         transform.rotation = rotations[directionFacing];
+
+        if (!instruction.IsSlowAction()) {
+            actionsSinceSlowAction += 1;
+            if (actionsSinceSlowAction >= 1000) {
+                Debug.Log("Infinite loop detected!");
+            } else {
+                RunProgram();
+            }
+        } else {
+            actionsSinceSlowAction = 0;
+        }
     }
 }

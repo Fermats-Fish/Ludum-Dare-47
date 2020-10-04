@@ -6,6 +6,10 @@ public class FunctionInstance {
     Robot robot;
     FunctionInstance[] functionArgs;
 
+    public bool IsSlowAction() {
+        return eval is SlowActionFunc;
+    }
+
     public static FunctionInstance Compile(Robot robot, string[] inputs, FunctionInstance[] availableArgs = null) {
         if (availableArgs == null) {
             availableArgs = new FunctionInstance[] { };

@@ -68,7 +68,15 @@ public class Function : Evaluatable {
     }
 
     public static readonly Function[] functionsArray = new Function[] {
-        new Function("GetPosition", 0, (Robot robot, Value[] args) => {
+        // Some constants
+        new Function("Resource", 0, (Robot robot, Value[] args) => new IntValue(1)),
+            new Function("Wall", 0, (Robot robot, Value[] args) => new IntValue(2)),
+            new Function("Enemy", 0, (Robot robot, Value[] args) => new IntValue(3)),
+            new Function("True", 0, (Robot robot, Value[] args) => new BoolValue(true)),
+            new Function("False", 0, (Robot robot, Value[] args) => new BoolValue(false)),
+
+            // Getters
+            new Function("GetPosition", 0, (Robot robot, Value[] args) => {
                 return new CoordValue(robot.curPos);
             }),
             new Function("Forwards", 0, (Robot robot, Value[] args) => {
@@ -97,11 +105,12 @@ public class Function : Evaluatable {
             new Function("GetBasePos", 0, (Robot robot, Value[] args) => {
                 return ToRelCoord(robot, robot.basePos);
             }),
-            // Helpers for input into GetClosest
-            new Function("Resource", 0, (Robot robot, Value[] args) => new IntValue(1)),
-            new Function("Wall", 0, (Robot robot, Value[] args) => new IntValue(2)),
-            new Function("Enemy", 0, (Robot robot, Value[] args) => new IntValue(3)),
+            new Function("SolidAt", 1, (Robot robot, Value[] args) => {
+                var coord = (CoordValue) args[0];
+                return new BoolValue(GameController.instance.walls.ContainsKey((coord.x, coord.y)));
+            }),
 
+            // Functions
             new Function("Add", 2, (Robot robot, Value[] args) => {
                 if (args[0] is CoordValue && args[1] is CoordValue) {
                     var coord1 = (CoordValue) args[0];
@@ -130,10 +139,6 @@ public class Function : Evaluatable {
                 }
                 throw new Exception("Can't subtract values of these types");
             }),
-            new Function("SolidAt", 1, (Robot robot, Value[] args) => {
-                var coord = (CoordValue) args[0];
-                return new BoolValue(GameController.instance.walls.ContainsKey((coord.x, coord.y)));
-            }),
             new Function("GetYCoordOf", 1, (Robot robot, Value[] args) => {
                 return new IntValue(((CoordValue) args[0]).y);
             }),
@@ -158,15 +163,26 @@ public class Function : Evaluatable {
                     ((IntValue) args[1]).value
                 );
             }),
+
+            // Quick actions
+
             // If statement will cause the next statement to be run if the condition is met, or 
             new ActionFunc("If", 1, (Robot robot, Value[] args) => {
                 var doAction = ((BoolValue) args[0]).value;
                 if (!doAction) {
                     robot.currentLine += 1;
                 }
+                robot.lastIfEvaluated = doAction;
             }),
-            new ActionFunc("MoveForward", 0, (Robot robot, Value[] args) => {
-                robot.MoveForward();
+
+            // Else statement causes the next statement to be run only if the last evaluated if statement didn't have the condition met
+            new ActionFunc("Else", 0, (Robot robot, Value[] args) => {
+                if (robot.lastIfEvaluated) {
+                    robot.currentLine += 1;
+                }
+            }),
+            new ActionFunc("Goto", 1, (Robot Robot, Value[] args) => {
+                Robot.currentLine = ((IntValue) args[0]).value - 1;
             }),
             new ActionFunc("TurnRight", 0, (Robot robot, Value[] args) => {
                 robot.TurnRight();
@@ -174,11 +190,13 @@ public class Function : Evaluatable {
             new ActionFunc("TurnLeft", 0, (Robot robot, Value[] args) => {
                 robot.TurnLeft();
             }),
-            new ActionFunc("MoveDirection", 1, (Robot robot, Value[] args) => {
-                robot.MoveDirection(((IntValue) args[0]).value);
+
+            // Slow actions
+            new SlowActionFunc("MoveForward", 0, (Robot robot, Value[] args) => {
+                robot.MoveForward();
             }),
-            new ActionFunc("Goto", 1, (Robot Robot, Value[] args) => {
-                Robot.currentLine = ((IntValue) args[0]).value - 1;
+            new SlowActionFunc("MoveDirection", 1, (Robot robot, Value[] args) => {
+                robot.MoveDirection(((IntValue) args[0]).value);
             }),
     };
 
@@ -198,4 +216,8 @@ public class ActionFunc : Function {
         evaluateFunction(robot, args);
         return null;
     }) { }
+}
+
+public class SlowActionFunc : ActionFunc {
+    public SlowActionFunc(string name, int numArgs, Action<Robot, Value[]> evaluateFunction) : base(name, numArgs, evaluateFunction) { }
 }
