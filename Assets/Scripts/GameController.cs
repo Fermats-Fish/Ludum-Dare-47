@@ -13,7 +13,7 @@ public class GameController : MonoBehaviour {
     public const float timeStep = 0.6f;
     float time = timeStep;
 
-    public GameObject robotPrefab, floorPrefab, wallPrefab, resourcePrefab, enemyPrefab;
+    public GameObject robotPrefab, floorPrefab, wallPrefab, resourcePrefab, enemyPrefab, basePrefab;
 
     public(int x, int y) gridSize = (10, 10);
     public int wallCount = 3, resourceCount = 3;
@@ -108,6 +108,10 @@ public class GameController : MonoBehaviour {
 
     public Robot SpawnRobot() {
         Robot robot = Instantiate(robotPrefab).GetComponent<Robot>();
+        robot.curPos = RandomPosition();
+        robot.basePos = robot.curPos;
+        robot.directionFacing = Random.Range(0, 4);
+        Instantiate(basePrefab, TileToWorldCoord(robot.curPos), Quaternion.identity);
         return robot;
     }
 

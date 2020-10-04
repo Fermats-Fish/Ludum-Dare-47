@@ -5,6 +5,7 @@ using UnityEngine;
 public class Robot : Entity {
 
     public int directionFacing = 3;
+    public(int x, int y) basePos;
 
     // List<Instruction> instructions = new List<Instruction>();
     List<FunctionInstance> instructions = new List<FunctionInstance>();
@@ -21,9 +22,16 @@ public class Robot : Entity {
     // Start is called before the first frame update
     protected override void Start() {
         base.Start();
-        AddInstruction("If SolidAt CoordPlus GetPosition Forwards");
-        AddInstruction("TurnRight");
+        // AddInstruction("If SolidAt Add GetPosition Forwards");
+        // AddInstruction("TurnRight");
+        // AddInstruction("MoveForward");
+        AddInstruction("If LessThan 0 GetYCoordOf GetBasePos");
+        AddInstruction("Goto 3");
+        AddInstruction("Goto 5");
         AddInstruction("MoveForward");
+        AddInstruction("Goto 0");
+        AddInstruction("TurnRight");
+
     }
 
     public void AddInstruction(string instruction) {
