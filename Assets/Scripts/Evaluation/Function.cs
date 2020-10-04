@@ -157,6 +157,23 @@ public class Function : Evaluatable {
                     ((IntValue) args[1]).value
                 );
             }),
+            new Function("RandomRange", 2, (Robot robot, Value[] args) => {
+                return new IntValue(UnityEngine.Random.Range(((IntValue) args[0]).value, ((IntValue) args[1]).value));
+            }),
+            new Function("RandomDir", 0, (Robot robot, Value[] args) => {
+                if (UnityEngine.Random.Range(0, 2) == 0) {
+                    return new IntValue(-1);
+                } else {
+                    return new IntValue(1);
+                }
+            }),
+            new Function("SetVar", 2, (Robot robot, Value[] args) => {
+                robot.memory[((IntValue) args[0]).value] = args[1];
+                return args[1];
+            }),
+            new Function("GetVar", 1, (Robot robot, Value[] args) => {
+                return robot.memory[((IntValue) args[0]).value];
+            }),
 
             // Quick actions
 
@@ -183,6 +200,13 @@ public class Function : Evaluatable {
             }),
             new ActionFunc("TurnLeft", 0, (Robot robot, Value[] args) => {
                 robot.TurnLeft();
+            }),
+            new ActionFunc("TurnDir", 1, (Robot robot, Value[] args) => {
+                if (((IntValue) args[0]).value < 0) {
+                    robot.TurnLeft();
+                } else if (((IntValue) args[0]).value > 0) {
+                    robot.TurnRight();
+                }
             }),
 
             // Slow actions

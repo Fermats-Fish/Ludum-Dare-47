@@ -11,6 +11,8 @@ public class Robot : Entity {
 
     public bool lastIfEvaluated = true;
 
+    public Value[] memory = new Value[] { null, null, null };
+
     // List<Instruction> instructions = new List<Instruction>();
     List<FunctionInstance> instructions = new List<FunctionInstance>();
 
@@ -30,10 +32,14 @@ public class Robot : Entity {
         // AddInstruction("TurnRight");
         // AddInstruction("MoveForward");
         AddInstruction("If LessThan 0 GetYCoordOf GetBasePos");
-        AddInstruction("MoveForward");
+        AddInstruction("Goto 5");
         AddInstruction("Else");
-        AddInstruction("TurnRight");
-
+        AddInstruction("TurnDir RandomDir");
+        AddInstruction("Goto 0");
+        AddInstruction("If SolidAt Add GetPosition Forwards");
+        AddInstruction("TurnDir RandomDir");
+        AddInstruction("If Not SolidAt Add GetPosition Forwards");
+        AddInstruction("MoveForward");
     }
 
     public void AddInstruction(string instruction) {
