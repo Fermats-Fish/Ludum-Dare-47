@@ -70,7 +70,7 @@ public class Function : Evaluatable {
             new Function("False", 0, (Robot robot, Value[] args) => new BoolValue(false)),
 
             // Getters
-            new Function("GetPosition", 0, (Robot robot, Value[] args) => {
+            new Function("GetPos", 0, (Robot robot, Value[] args) => {
                 return new CoordValue(robot.curPos);
             }),
             new Function("Forwards", 0, (Robot robot, Value[] args) => {
@@ -146,7 +146,15 @@ public class Function : Evaluatable {
                 return new BoolValue(((IntValue) args[0]).value <= ((IntValue) args[1]).value);
             }),
             new Function("Equals", 2, (Robot robot, Value[] args) => {
-                return new BoolValue(((IntValue) args[0]).value == ((IntValue) args[1]).value);
+                if (args[0] is CoordValue && args[1] is CoordValue) {
+                    var coord1 = (CoordValue) args[0];
+                    var coord2 = (CoordValue) args[1];
+                    return new BoolValue(coord1.x == coord2.x && coord1.y == coord2.y);
+                } else if (args[0] is IntValue && args[1] is IntValue) {
+                    return new BoolValue(((IntValue) args[0]).value == ((IntValue) args[1]).value);
+                }
+                throw new Exception("Can't subtract values of these types");
+
             }),
             new Function("Not", 1, (Robot Robot, Value[] args) => {
                 return new BoolValue(!((BoolValue) args[0]).value);
@@ -216,7 +224,7 @@ public class Function : Evaluatable {
             new SlowActionFunc("MoveDirection", 1, (Robot robot, Value[] args) => {
                 robot.MoveDirection(((IntValue) args[0]).value);
             }),
-            new SlowActionFunc("Wait", 0, (Robot robot, Value[] args) => { })
+            new SlowActionFunc("Wait", 0, (Robot robot, Value[] args) => { }),
     };
 
     public Function(string name, int numArgs, Func<Robot, Value[], Value> evaluateFunction) {

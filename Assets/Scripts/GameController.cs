@@ -9,7 +9,7 @@ public class GameController : MonoBehaviour {
 
     public List<Entity> entities;
 
-    Dictionary < (int, int), Resource > resources;
+    public Dictionary < (int, int), Resource > resources = new Dictionary < (int, int), Resource > ();
     public const float timeStep = 0.6f;
     float time = timeStep;
 
@@ -55,7 +55,7 @@ public class GameController : MonoBehaviour {
 
         for (int i = 0; i < wallCount; i++) {
             Wall wall = Instantiate(wallPrefab).GetComponent<Wall>();
-            var pos = RandomPosition();
+            var pos = RandomEmptyPos();
             if (!walls.ContainsKey(pos)) {
                 walls.Add(pos, wall);
                 wall.transform.position = TileToWorldCoord(pos);
@@ -140,7 +140,7 @@ public class GameController : MonoBehaviour {
 
     public Robot SpawnRobot() {
         Robot robot = Instantiate(robotPrefab).GetComponent<Robot>();
-        robot.curPos = RandomPosition();
+        robot.curPos = RandomEmptyPos();
         robot.basePos = robot.curPos;
         robot.directionFacing = Random.Range(0, 4);
         Instantiate(basePrefab, TileToWorldCoord(robot.curPos), Quaternion.identity);

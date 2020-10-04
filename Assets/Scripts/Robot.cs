@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Robot : Entity {
 
+    public bool running = true;
     int actionsSinceSlowAction = 0;
 
     public int directionFacing = 3;
@@ -32,13 +33,13 @@ public class Robot : Entity {
         // AddInstruction("TurnRight");
         // AddInstruction("MoveForward");
         AddInstruction("If LessThan 0 GetYCoordOf GetBasePos");
-        AddInstruction("Goto 5");
+        AddInstruction("Goto 7");
         AddInstruction("Else");
         AddInstruction("TurnDir RandomDir");
-        AddInstruction("Goto 0");
-        AddInstruction("If SolidAt Add GetPosition Forwards");
+        AddInstruction("Goto 3");
+        AddInstruction("If SolidAt Add GetPos Forwards");
         AddInstruction("TurnDir RandomDir");
-        AddInstruction("If Not SolidAt Add GetPosition Forwards");
+        AddInstruction("If Not SolidAt Add GetPos Forwards");
         AddInstruction("MoveForward");
     }
 
@@ -68,6 +69,10 @@ public class Robot : Entity {
 
     protected override void RunProgram() {
 
+        if (!running) {
+            return;
+        }
+
         if (currentLine >= instructions.Count || currentLine < 0) {
             currentLine = 0;
         }
@@ -90,10 +95,25 @@ public class Robot : Entity {
         } else {
             actionsSinceSlowAction = 0;
         }
+
+        // Turn off if we are going back to base.
+        if (target == basePos) {
+            running = false;
+        }
+
+    }
+
+    void GoHome() {
+        curPos = basePos;
+        target = basePos;
+        running = false;
+    }
+
+    public void TurnOn() {
+        running = true;
     }
 
     public override void Die() {
-        curPos = basePos;
-        target = basePos;
+        GoHome();
     }
 }
