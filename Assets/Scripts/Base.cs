@@ -2,19 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Base : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-       
+public class Base : MonoBehaviour {
+    public Robot robot;
+
+    void OnMouseDown() {
+        if (!robot.running) {
+            UIController.instance.SelectRobot(robot);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-   
 }

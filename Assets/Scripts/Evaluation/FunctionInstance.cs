@@ -26,10 +26,17 @@ public class FunctionInstance {
         if (Int32.TryParse(valueToParse, out var res)) {
             func = new IntValue(res);
         } else {
-            func = Function.functions[valueToParse.ToLower()];
+            try {
+                func = Function.functions[valueToParse.ToLower()];
+            } catch {
+                throw new CompileError(valueToParse + " is not a valid value/function");
+            }
         }
 
         // Get remaining available args.
+        if (availableArgs.Length < func.numArgs) {
+            throw new CompileError("Not enough arguments on line");
+        }
         var usedArgs = availableArgs.SubArray(0, func.numArgs);
         var remainingArgs = availableArgs.SubArray(func.numArgs);
 
@@ -41,6 +48,9 @@ public class FunctionInstance {
 
         // Depending on whether there are any remaining strings or not recurse.
         if (remainingInputs.Length == 0) {
+            if (remainingArgs.Length != 1) {
+                throw new CompileError("Too many arguments on line");
+            }
             return lastFuncInstance;
         } else {
             return Compile(robot, remainingInputs, remainingArgs);

@@ -36,6 +36,9 @@ public class Function : Evaluatable {
     }
 
     static CoordValue GetClosest(Robot robot, Func < (int, int), bool > predicate) {
+        if (predicate(robot.curPos)) {
+            return new CoordValue(0, 0);
+        }
         int range = 0;
         while (true) {
             range += 1;
@@ -219,6 +222,7 @@ public class Function : Evaluatable {
 
             // Slow actions
             new SlowActionFunc("MoveForward", 0, (Robot robot, Value[] args) => {
+                Debug.Log("Move");
                 robot.MoveForward();
             }),
             new SlowActionFunc("MoveDirection", 1, (Robot robot, Value[] args) => {

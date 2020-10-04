@@ -14,7 +14,7 @@ public class Robot : Entity {
 
     public Value[] memory = new Value[] { null, null, null };
 
-    // List<Instruction> instructions = new List<Instruction>();
+    public string programText { get; protected set; }
     List<FunctionInstance> instructions = new List<FunctionInstance>();
 
     public static readonly Quaternion[] rotations = new Quaternion[] {
@@ -29,24 +29,33 @@ public class Robot : Entity {
     // Start is called before the first frame update
     protected override void Start() {
         base.Start();
+        programText = "If LessThan 0 GetYCoordOf GetClosest Resource\n" +
+            "Goto 7\n" +
+            "Else\n" +
+            "TurnDir RandomDir\n" +
+            "Goto 0\n" +
+            "If SolidAt Add GetPos Forwards\n" +
+            "TurnDir RandomDir\n" +
+            "If Not SolidAt Add GetPos Forwards\n" +
+            "MoveForward";
+        Compile(programText);
         // AddInstruction("If SolidAt Add GetPosition Forwards");
         // AddInstruction("TurnRight");
         // AddInstruction("MoveForward");
-        AddInstruction("If LessThan 0 GetYCoordOf GetBasePos");
-        AddInstruction("Goto 7");
-        AddInstruction("Else");
-        AddInstruction("TurnDir RandomDir");
-        AddInstruction("Goto 3");
-        AddInstruction("If SolidAt Add GetPos Forwards");
-        AddInstruction("TurnDir RandomDir");
-        AddInstruction("If Not SolidAt Add GetPos Forwards");
-        AddInstruction("MoveForward");
     }
 
-    public void AddInstruction(string instruction) {
-        instructions.Add(
-            FunctionInstance.Compile(this, instruction.Split(' '))
-        );
+    public void Compile(string program) {
+        List<FunctionInstance> newInstructions = new List<FunctionInstance>();
+        var lines = program.Split('\n');
+        foreach (var line in lines) {
+            if (line != "") {
+                newInstructions.Add(FunctionInstance.Compile(this, line.Split(' ')));
+            } else {
+                newInstructions.Add(new FunctionInstance(this, new Value(), new FunctionInstance[] { }));
+            }
+        }
+        instructions = newInstructions;
+        programText = program;
     }
 
     public void TurnLeft() {
@@ -87,7 +96,7 @@ public class Robot : Entity {
         if (!instruction.IsSlowAction()) {
             actionsSinceSlowAction += 1;
             if (actionsSinceSlowAction >= 100) {
-                Debug.Log("Infinite loop detected!");
+                Debug.Log("Infinite loop detected! - Line " + currentLine);
                 actionsSinceSlowAction = 0;
             } else {
                 RunProgram();
@@ -103,13 +112,14 @@ public class Robot : Entity {
 
     }
 
-    void GoHome() {
-        curPos = basePos;
+    public void GoHome() {
         target = basePos;
+        GoToTarget();
         running = false;
     }
 
     public void TurnOn() {
+        currentLine = 0;
         running = true;
     }
 

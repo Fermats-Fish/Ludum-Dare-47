@@ -13,7 +13,6 @@ public class Entity : MonoBehaviour {
 
     protected virtual void Start() {
         GameController.instance.entities.Add(this);
-        target = ((int) transform.position.x, (int) transform.position.y);
     }
 
     protected virtual void Update() {
@@ -27,9 +26,13 @@ public class Entity : MonoBehaviour {
         if (GameController.instance.entities.Find(x => x is Enemy && x.curPos == curPos && x != this) != null) {
             Die();
         }
+        GoToTarget();
+        RunProgram();
+    }
+
+    public void GoToTarget() {
         curPos = target;
         transform.position = GameController.instance.TileToWorldCoord(curPos);
-        RunProgram();
     }
 
     protected virtual void RunProgram() {
