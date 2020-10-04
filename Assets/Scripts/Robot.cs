@@ -14,9 +14,8 @@ public class Robot : Entity {
     // Start is called before the first frame update
     protected override void Start() {
         base.Start();
-        AddInstruction("If LessThan GetXCoordOf GetPosition 4");
+        AddInstruction("If SolidAt CoordPlus GetPosition Forwards");
         AddInstruction("TurnRight");
-        AddInstruction("MoveForward");
         AddInstruction("MoveForward");
     }
 

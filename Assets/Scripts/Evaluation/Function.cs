@@ -13,6 +13,19 @@ public class Function : Evaluatable {
         new Function("GetPosition", 0, (Robot robot, Value[] args) => {
             return new CoordValue(robot.curPos);
         }),
+        new Function("Forwards", 0, (Robot robot, Value[] args) => {
+            return new CoordValue(Entity.directions[robot.directionFacing]);
+        }),
+        new Function("CoordPlus", 2, (Robot robot, Value[] args) => {
+            var coord1 = (CoordValue) args[0];
+            var coord2 = (CoordValue) args[1];
+
+            return new CoordValue(coord1.x + coord2.x, coord1.y + coord2.y);
+        }),
+        new Function("SolidAt", 1, (Robot robot, Value[] args) => {
+            var coord = (CoordValue) args[0];
+            return new BoolValue(GameController.instance.walls.ContainsKey((coord.x, coord.y)));
+        }),
         new Function("GetYCoordOf", 1, (Robot robot, Value[] args) => {
             return new IntValue(((CoordValue) args[0]).y);
         }),
