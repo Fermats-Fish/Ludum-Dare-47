@@ -83,6 +83,29 @@ public class GameController : MonoBehaviour {
         }
     }
 
+    public static(int x, int y) Bound(int x, int y) {
+        return Bound((x, y));
+    }
+
+    public static(int x, int y) Bound((int x, int y) coord) {
+        if (coord.x < 0) {
+            coord.x += GameController.instance.gridSize.x;
+        }
+
+        if (coord.y < 0) {
+            coord.y += GameController.instance.gridSize.y;
+        }
+
+        if (coord.x >= GameController.instance.gridSize.x) {
+            coord.x -= GameController.instance.gridSize.x;
+        }
+
+        if (coord.y >= GameController.instance.gridSize.y) {
+            coord.y -= GameController.instance.gridSize.y;
+        }
+        return coord;
+    }
+
     public Robot SpawnRobot() {
         Robot robot = Instantiate(robotPrefab).GetComponent<Robot>();
         return robot;

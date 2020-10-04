@@ -20,7 +20,7 @@ public class Function : Evaluatable {
             var coord1 = (CoordValue) args[0];
             var coord2 = (CoordValue) args[1];
 
-            return new CoordValue(coord1.x + coord2.x, coord1.y + coord2.y);
+            return new CoordValue(GameController.Bound(coord1.x + coord2.x, coord1.y + coord2.y));
         }),
         new Function("SolidAt", 1, (Robot robot, Value[] args) => {
             var coord = (CoordValue) args[0];

@@ -9,6 +9,13 @@ public class Robot : Entity {
     // List<Instruction> instructions = new List<Instruction>();
     List<FunctionInstance> instructions = new List<FunctionInstance>();
 
+    public static readonly Quaternion[] rotations = new Quaternion[] {
+        Quaternion.Euler(0f, 0f, 0f),
+        Quaternion.Euler(0f, 0f, -90f),
+        Quaternion.Euler(0f, 0f, -180f),
+        Quaternion.Euler(0f, 0f, -270f)
+    };
+
     public int currentLine;
 
     // Start is called before the first frame update
@@ -44,6 +51,7 @@ public class Robot : Entity {
     }
 
     protected override void RunProgram() {
+
         var instruction = instructions[currentLine];
         instruction.Evaluate();
 
@@ -52,5 +60,7 @@ public class Robot : Entity {
         if (currentLine >= instructions.Count) {
             currentLine = 0;
         }
+
+        transform.rotation = rotations[directionFacing];
     }
 }

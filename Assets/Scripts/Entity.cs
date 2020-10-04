@@ -43,23 +43,7 @@ public class Entity : MonoBehaviour {
         }
         var dirCoord = directions[dir];
         direction = dirCoord.ToVector3();
-        target = (curPos.x + dirCoord.x, curPos.y + dirCoord.y);
-
-        if (target.x < 0) {
-            target.x += GameController.instance.gridSize.x;
-        }
-
-        if (target.y < 0) {
-            target.y += GameController.instance.gridSize.y;
-        }
-
-        if (target.x >= GameController.instance.gridSize.x) {
-            target.x -= GameController.instance.gridSize.x;
-        }
-
-        if (target.y >= GameController.instance.gridSize.y) {
-            target.y -= GameController.instance.gridSize.y;
-        }
+        target = GameController.Bound(curPos.x + dirCoord.x, curPos.y + dirCoord.y);
 
         // Check for walls
         if (GameController.instance.walls.ContainsKey(target)) {

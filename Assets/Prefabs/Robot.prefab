@@ -45,7 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: {x: 0, y: 0, z: 0}
-  maxSpeed: 0
   directionFacing: 3
   currentLine: 0
 --- !u!212 &6345408860415604639
@@ -87,8 +86,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: f64dda7b0704b164f9b4060c3b27a92f, type: 3}
-  m_Color: {r: 0, g: 0.083981514, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 8adfe73988fd4d048a9e775c8a9c491a, type: 3}
+  m_Color: {r: 0.35596973, g: 0.34042364, b: 0.9622642, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
