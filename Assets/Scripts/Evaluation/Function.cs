@@ -129,6 +129,9 @@ public class Function : Evaluatable {
                 var coord = (CoordValue) args[0];
                 return new BoolValue(GameController.instance.walls.ContainsKey((coord.x, coord.y)));
             }),
+            new Function("CarryingResource", 0, (Robot robot, Value[] args) => {
+                return new BoolValue(robot.GetHasResource());
+            }),
 
             // Functions
             new Function("Add", 2, (Robot robot, Value[] args) => {
@@ -249,6 +252,9 @@ public class Function : Evaluatable {
             }),
             new SlowActionFunc("MoveDirection", 1, (Robot robot, Value[] args) => {
                 robot.MoveDirection(((IntValue) args[0]).value);
+            }),
+            new SlowActionFunc("PickupResource", 0, (Robot robot, Value[] args) => {
+                robot.PickupResource();
             }),
             new SlowActionFunc("Wait", 0, (Robot robot, Value[] args) => { }),
     };
