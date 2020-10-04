@@ -32,7 +32,7 @@ public class Function : Evaluatable {
             coord.x = y;
         }
 
-        return new CoordValue(coord);
+        return new CoordValue(GameController.BoundRelPos(coord));
     }
 
     static CoordValue GetClosest(Robot robot, Func < (int, int), bool > predicate) {

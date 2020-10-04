@@ -106,6 +106,32 @@ public class GameController : MonoBehaviour {
         return coord;
     }
 
+    // Bounding a relative pos bounds x between [-size/2, size/2] if size is odd, or [-size/2+1, size/2] if size is even.
+    public static(int x, int y) BoundRelPos(int x, int y) {
+        return BoundRelPos((x, y));
+    }
+
+    public static(int x, int y) BoundRelPos((int x, int y) coord) {
+        var maxX = GameController.instance.gridSize.x / 2;
+        var minX = maxX % 2 == 0 ? -maxX + 1 : -maxX;
+
+        var maxY = GameController.instance.gridSize.y / 2;
+        var minY = maxY % 2 == 0 ? -maxY + 1 : -maxY;
+
+        if (coord.x < minX) {
+            coord.x += GameController.instance.gridSize.x;
+        } else if (coord.x > maxX) {
+            coord.x -= GameController.instance.gridSize.x;
+        }
+
+        if (coord.y < minY) {
+            coord.y += GameController.instance.gridSize.y;
+        } else if (coord.y > maxY) {
+            coord.y -= GameController.instance.gridSize.y;
+        }
+        return coord;
+    }
+
     public Robot SpawnRobot() {
         Robot robot = Instantiate(robotPrefab).GetComponent<Robot>();
         robot.curPos = RandomPosition();
