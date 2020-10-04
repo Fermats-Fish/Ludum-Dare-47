@@ -23,6 +23,8 @@ public class CoordValue : Value {
         this.y = y;
     }
 
+    public CoordValue((int x, int y) c) : this(c.x, c.y) { }
+
 }
 
 public class IntValue : Value {

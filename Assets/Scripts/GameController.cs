@@ -5,19 +5,20 @@ using UnityEngine;
 public class GameController : MonoBehaviour {
     public static GameController instance;
 
-    private List<Vector3> gridPositions = new List<Vector3>();
     public Base playerBase;
-    public List<Robot> robots;
-    public List<Floor> floor;
-    public List<Wall> walls;
-    public List<Enemy> enemies;
-    public List<Resource> resources;
-    public float timeStep, time;
+
+    public List<Entity> entities;
+
+    Dictionary < (int, int), Resource > resources;
+    public const float timeStep = 0.2f;
+    float time = timeStep;
 
     public GameObject robotPrefab, floorPrefab, wallPrefab, resourcePrefab, enemyPrefab;
 
-    public Vector2 gridSize = new Vector2(0, 0);
+    public(int x, int y) gridSize = (10, 10);
     public int wallCount = 3, resourceCount = 3;
+
+    public Dictionary < (int, int), Wall > walls = new Dictionary < (int, int), Wall > ();
 
     // Start is called before the first frame update
     void Start() {
@@ -25,30 +26,40 @@ public class GameController : MonoBehaviour {
             instance = this;
         }
         InitGrid();
+        SpawnRobot();
+    }
 
-        for (int i = 0; i < robots.Count; i++) {
-            robots[i] = Instantiate(robotPrefab, transform).GetComponent<Robot>();
-        }
+    public Vector3 TileToWorldCoord((int x, int y) coord) {
+        return TileToWorldCoord(coord.x, coord.y);
+    }
+
+    public Vector3 TileToWorldCoord(int x, int y) {
+        return new Vector3(x - gridSize.x / 2, y - gridSize.y / 2, 0);
+    }
+
+    public(int x, int y) WorldToTileCoord(Vector3 pos) {
+        return ((int) (pos.x + gridSize.x / 2), (int) (pos.y + gridSize.y / 2));
     }
 
     void InitGrid() {
-        gridPositions.Clear();
 
-        for (int i = 0; i <= gridSize.x; i++) {
-            for (int j = 0; j <= gridSize.y; j++) {
-                Vector3 pos = new Vector3(i - gridSize.x / 2, j - gridSize.y / 2, 0);
-                gridPositions.Add(pos);
-                Floor floorTile = Instantiate(floorPrefab, transform).GetComponent<Floor>();
-                float c = (Random.value + 9) / 10;
+        for (int i = 0; i < gridSize.x; i++) {
+            for (int j = 0; j < gridSize.y; j++) {
+                Vector3 pos = TileToWorldCoord(i, j);
+                var floorTile = Instantiate(floorPrefab, transform);
+                float c = Random.Range(0.5f, 0.6f);
                 floorTile.GetComponent<SpriteRenderer>().color = new Color(c, c, c);
                 floorTile.transform.position = pos;
-                floor.Add(floorTile);
             }
         }
 
         for (int i = 0; i < wallCount; i++) {
             Wall wall = Instantiate(wallPrefab).GetComponent<Wall>();
-            wall.transform.position = RandomPosition();
+            var pos = RandomPosition();
+            if (!walls.ContainsKey(pos)) {
+                walls.Add(pos, wall);
+                wall.transform.position = TileToWorldCoord(pos);
+            }
         }
 
         SpawnResource();
@@ -59,114 +70,39 @@ public class GameController : MonoBehaviour {
         int tries = 0;
         for (int i = 0; i < resourceCount; i++) {
             Resource resource = Instantiate(resourcePrefab).GetComponent<Resource>();
-            Vector3 pos = RandomPosition();
-            for (int j = 0; j < walls.Count; j++) {
-                while (pos.Equals(walls[j]) || tries < 100) {
-                    pos = RandomPosition();
-                    tries++;
-                }
-                if (tries >= 100) {
-                    return;
-                }
+            var pos = RandomPosition();
+            while (walls.ContainsKey(pos) && tries < 100) {
+                pos = RandomPosition();
+                tries++;
             }
-            resource.transform.position = pos;
+            if (tries >= 100) {
+                return;
+            }
+            Vector3 worldPos = TileToWorldCoord(pos);
+            resource.transform.position = worldPos;
         }
     }
 
     public Robot SpawnRobot() {
         Robot robot = Instantiate(robotPrefab).GetComponent<Robot>();
-        robots.Add(robot);
         return robot;
     }
 
-    public Vector3 RandomPosition() {
-        Vector2 pos = Vector2.zero;
-        while (pos.Equals(Vector2.zero)) {
-            pos = new Vector3((int) (gridSize.x * Random.value - gridSize.x / 2), (int) (gridSize.y * Random.value - gridSize.y / 2), 0);
-        }
-        return pos;
-    }
-
-    public void CheckBounds(Enemy e) {
-        Vector2 pos = e.transform.position;
-        Vector2 newPos = pos;
-        Vector2 target = e.target;
-        Vector2 newTarget = target;
-        bool outOfBounds = false;
-
-        if (target.x > gridSize.x / 2 && pos.x > gridSize.x / 2) {
-            newPos.x = -gridSize.x / 2 - 1;
-            newTarget.x = -gridSize.x / 2;
-            outOfBounds = true;
-        }
-        if (target.x < -gridSize.x / 2 && pos.x < -gridSize.x / 2) {
-            newPos.x = gridSize.x / 2 + 1;
-            newTarget.x = gridSize.x / 2;
-            outOfBounds = true;
-        }
-        if (target.y > gridSize.y / 2 && pos.y > gridSize.y / 2) {
-            newPos.y = -gridSize.y / 2 - 1;
-            newTarget.y = -gridSize.y / 2;
-            outOfBounds = true;
-        }
-        if (target.y < -gridSize.y / 2 && pos.y < -gridSize.y / 2) {
-            newPos.y = gridSize.y / 2 + 1;
-            newTarget.y = gridSize.y / 2;
-            outOfBounds = true;
-        }
-        if (outOfBounds) {
-            e.target = newTarget;
-            e.transform.position = newPos;
-        }
-    }
-
-    public void CheckBounds(Robot robot) {
-        Vector2 pos = robot.transform.position;
-        Vector2 newPos = pos;
-        Vector2 target = robot.target;
-        Vector2 newTarget = target;
-        bool outOfBounds = false;
-
-        if (target.x > gridSize.x / 2 && pos.x > gridSize.x / 2) {
-            newPos.x = -gridSize.x / 2 - 1;
-            newTarget.x = -gridSize.x / 2;
-            outOfBounds = true;
-        }
-        if (target.x < -gridSize.x / 2 && pos.x < -gridSize.x / 2) {
-            newPos.x = gridSize.x / 2 + 1;
-            newTarget.x = gridSize.x / 2;
-            outOfBounds = true;
-        }
-        if (target.y > gridSize.y / 2 && pos.y > gridSize.y / 2) {
-            newPos.y = -gridSize.y / 2 - 1;
-            newTarget.y = -gridSize.y / 2;
-            outOfBounds = true;
-        }
-        if (target.y < -gridSize.y / 2 && pos.y < -gridSize.y / 2) {
-            newPos.y = gridSize.y / 2 + 1;
-            newTarget.y = gridSize.y / 2;
-            outOfBounds = true;
-        }
-        if (outOfBounds) {
-            robot.target = newTarget;
-            robot.transform.position = newPos;
-        }
+    public(int, int) RandomPosition() {
+        return (Random.Range(0, gridSize.x), Random.Range(0, gridSize.y));
     }
 
     // Update is called once per frame
     protected void Update() {
-        if (time > timeStep) {
 
-            time = 0;
-            for (int i = 0; i < robots.Count; i++) {
-                Robot robot = robots[i];
-                robot.RunProgram();
-            }
-            for (int i = 0; i < enemies.Count; i++) {
-                Enemy enemy = enemies[i];
-                enemy.RunProgram();
+        time += Time.deltaTime;
+
+        while (time >= timeStep) {
+
+            time -= timeStep;
+            foreach (Entity entity in entities) {
+                entity.TakeStep();
             }
         }
-        time += Time.deltaTime;
     }
 }

@@ -11,8 +11,7 @@ public class Function : Evaluatable {
 
     public static readonly Function[] functionsArray = new Function[] {
         new Function("GetPosition", 0, (Robot robot, Value[] args) => {
-            Debug.Log(robot.transform.position);
-            return new CoordValue((int) robot.transform.position.x, (int) robot.transform.position.y);
+            return new CoordValue(robot.curPos);
         }),
         new Function("GetYCoordOf", 1, (Robot robot, Value[] args) => {
             return new IntValue(((CoordValue) args[0]).y);
@@ -56,7 +55,7 @@ public class Function : Evaluatable {
             robot.TurnLeft();
         }),
         new ActionFunc("MoveDirection", 1, (Robot robot, Value[] args) => {
-            robot.MoveDirection(Robot.directions[((IntValue) args[0]).value]);
+            robot.MoveDirection(((IntValue) args[0]).value);
         }),
         new ActionFunc("Goto", 1, (Robot Robot, Value[] args) => {
             Robot.currentLine = ((IntValue) args[0]).value - 1;
