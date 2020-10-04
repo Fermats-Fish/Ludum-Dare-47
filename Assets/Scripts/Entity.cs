@@ -25,7 +25,7 @@ public class Entity : MonoBehaviour {
     public void TakeStep() {
         direction = Vector3.zero;
         if (GameController.instance.entities.Find(x => x is Enemy && x.curPos == curPos && x != this) != null) {
-            Debug.Log("Death");
+            Die();
         }
         curPos = target;
         transform.position = GameController.instance.TileToWorldCoord(curPos);
@@ -50,5 +50,9 @@ public class Entity : MonoBehaviour {
             target = curPos;
             direction = Vector3.zero;
         }
+    }
+
+    public virtual void Die() {
+        Debug.Log("Death");
     }
 }

@@ -81,7 +81,7 @@ public class Function : Evaluatable {
 
                 // Get closest resource
                 if (arg.value == 1) {
-                    throw new NotImplementedException();
+                    return GetClosest(robot, ((int x, int y) c) => GameController.instance.resources.ContainsKey(c));
                 }
 
                 // Get closest wall

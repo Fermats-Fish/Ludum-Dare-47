@@ -91,4 +91,9 @@ public class Robot : Entity {
             actionsSinceSlowAction = 0;
         }
     }
+
+    public override void Die() {
+        curPos = basePos;
+        target = basePos;
+    }
 }

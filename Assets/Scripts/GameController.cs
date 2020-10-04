@@ -66,20 +66,26 @@ public class GameController : MonoBehaviour {
 
     }
 
-    public void SpawnResource() {
+    public(int x, int y) RandomEmptyPos() {
         int tries = 0;
+        var pos = RandomPosition();
+        while (walls.ContainsKey(pos) && tries < 100) {
+            pos = RandomPosition();
+            tries++;
+        }
+        if (tries >= 100) {
+            return pos;
+        }
+        return pos;
+    }
+
+    public void SpawnResource() {
         for (int i = 0; i < resourceCount; i++) {
             Resource resource = Instantiate(resourcePrefab).GetComponent<Resource>();
-            var pos = RandomPosition();
-            while (walls.ContainsKey(pos) && tries < 100) {
-                pos = RandomPosition();
-                tries++;
-            }
-            if (tries >= 100) {
-                return;
-            }
+            var pos = RandomEmptyPos();
             Vector3 worldPos = TileToWorldCoord(pos);
             resource.transform.position = worldPos;
+            resources.Add(pos, resource);
         }
     }
 
