@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Function : Evaluatable {
 
+    public string name;
+
     Func<Robot, Value[], Value> evaluateFunction;
 
     public static Dictionary<string, Function> functions = new Dictionary<string, Function>();
@@ -232,6 +234,7 @@ public class Function : Evaluatable {
     };
 
     public Function(string name, int numArgs, Func<Robot, Value[], Value> evaluateFunction) {
+        this.name = name;
         this.numArgs = numArgs;
         this.evaluateFunction = evaluateFunction;
         functions.Add(name.ToLower(), this);

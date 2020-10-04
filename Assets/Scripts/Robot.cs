@@ -48,9 +48,14 @@ public class Robot : Entity {
     public void Compile(string program) {
         List<FunctionInstance> newInstructions = new List<FunctionInstance>();
         var lines = program.Split('\n');
-        foreach (var line in lines) {
+        for (var i = 0; i < lines.Length; i++) {
+            var line = lines[i];
             if (line != "") {
-                newInstructions.Add(FunctionInstance.Compile(this, line.Split(' ')));
+                try {
+                    newInstructions.Add(FunctionInstance.Compile(this, line.Replace("\r", "").Split(' ')));
+                } catch (CompileError e) {
+                    throw new CompileError("Line " + i + ": " + e.Message);
+                }
             } else {
                 newInstructions.Add(new FunctionInstance(this, new Value(), new FunctionInstance[] { }));
             }
