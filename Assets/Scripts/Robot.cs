@@ -12,7 +12,7 @@ public class Robot : MonoBehaviour {
     public static readonly Vector3 west = new Vector3(-1, 0, 0);
 
     public static readonly Vector3[] directions = new Vector3[] { north, east, south, west };
-    public int directionFacing = 0;
+    public int directionFacing = 4;
 
     // List<Instruction> instructions = new List<Instruction>();
     List<FunctionInstance> instructions = new List<FunctionInstance>();
@@ -73,7 +73,7 @@ public class Robot : MonoBehaviour {
             return;
         }
 
-        Debug.Log(" CurrentLine: " + currentLine);
+        Debug.Log("CurrentLine: " + currentLine);
 
         timeStep = 0;
 

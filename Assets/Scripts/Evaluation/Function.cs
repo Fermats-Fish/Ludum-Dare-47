@@ -18,7 +18,7 @@ public class Function : Evaluatable {
             return new IntValue(((CoordValue) args[0]).y);
         }),
         new Function("GetXCoordOf", 1, (Robot robot, Value[] args) => {
-            return new IntValue(((CoordValue) args[0]).y);
+            return new IntValue(((CoordValue) args[0]).x);
         }),
         new Function("LessThan", 2, (Robot robot, Value[] args) => {
             return new BoolValue(((IntValue) args[0]).value < ((IntValue) args[1]).value);
@@ -40,7 +40,9 @@ public class Function : Evaluatable {
         }),
         // If statement will cause the next statement to be run if the condition is met, or 
         new ActionFunc("If", 1, (Robot robot, Value[] args) => {
-            if (!((BoolValue) args[0]).value) {
+            var doAction = ((BoolValue) args[0]).value;
+            Debug.Log(doAction);
+            if (!doAction) {
                 robot.currentLine += 1;
             }
         }),
