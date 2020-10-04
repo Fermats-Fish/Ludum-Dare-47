@@ -12,7 +12,7 @@ public class Robot : MonoBehaviour {
     public static readonly Vector3 west = new Vector3(-1, 0, 0);
 
     public static readonly Vector3[] directions = new Vector3[] { north, east, south, west };
-    public int directionFacing = 4;
+    public int directionFacing = 3;
 
     // List<Instruction> instructions = new List<Instruction>();
     List<FunctionInstance> instructions = new List<FunctionInstance>();
@@ -48,6 +48,7 @@ public class Robot : MonoBehaviour {
     }
 
     public void MoveForward() {
+        Debug.Log("Move in dir " + directionFacing);
         MoveDirection(Robot.directions[directionFacing]);
     }
 
