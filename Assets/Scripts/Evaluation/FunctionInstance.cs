@@ -1,0 +1,67 @@
+using System;
+using System.Linq;
+
+public class FunctionInstance {
+    Evaluatable eval;
+    Robot robot;
+    FunctionInstance[] functionArgs;
+
+    public static FunctionInstance Compile(Robot robot, string[] inputs, FunctionInstance[] availableArgs = null) {
+        if (availableArgs == null) {
+            availableArgs = new FunctionInstance[] { };
+        }
+
+        // Get last string value.
+        var valueToParse = inputs[inputs.Length - 1];
+
+        // Get other strings.
+        var remainingInputs = inputs.SubArray(0, -1);
+
+        // Get the function for this value.
+        Evaluatable func;
+        if (Int32.TryParse(valueToParse, out var res)) {
+            func = new IntValue(res);
+        } else {
+            func = Function.functions[valueToParse.ToLower()];
+        }
+
+        // Get remaining available args.
+        var usedArgs = availableArgs.SubArray(0, func.numArgs);
+        var remainingArgs = availableArgs.SubArray(func.numArgs);
+
+        // Create a function instance.
+        var lastFuncInstance = new FunctionInstance(robot, func, usedArgs);
+
+        // Insert as first value in remaining args.
+        remainingArgs = new FunctionInstance[] { lastFuncInstance }.Concat(remainingArgs).ToArray();
+
+        // Depending on whether there are any remaining strings or not recurse.
+        if (remainingInputs.Length == 0) {
+            return lastFuncInstance;
+        } else {
+            return Compile(robot, remainingInputs, remainingArgs);
+        }
+    }
+
+    public FunctionInstance(Robot robot, Evaluatable eval, FunctionInstance[] functionArgs) {
+        this.robot = robot;
+        this.eval = eval;
+        this.functionArgs = functionArgs;
+    }
+
+    public Value Evaluate() {
+        return eval.Evaluate(robot, functionArgs.Select(x => x.Evaluate()).ToArray());
+    }
+}
+
+static class ExtensionMethods {
+    public static T[] SubArray<T>(this T[] data, int startIndex, int endIndexExclusive = 0) {
+        if (endIndexExclusive <= 0) {
+            endIndexExclusive = endIndexExclusive + data.Length;
+        }
+        var length = endIndexExclusive - startIndex;
+        T[] result = new T[length];
+        Array.Copy(data, startIndex, result, 0, length);
+        return result;
+    }
+}

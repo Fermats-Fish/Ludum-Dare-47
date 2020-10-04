@@ -1,4 +1,3 @@
-
 using System;
 using UnityEngine;
 
@@ -12,26 +11,26 @@ public static class Commander {
   public static void AddCommand(Robot robot, Command command, Predicate predicateEnum, string predicateParam, string actionParam) {
 
     var predicate = GetPredicate(predicateEnum);
-    switch(command) {
-      case Command.Print:
-        robot.AddInstruction(new PrintInstruction(predicate, "", actionParam));
-        break;
-      case Command.MoveEast:
-        robot.AddInstruction(new MoveEastInstruction(predicate, predicateParam, ""));
-        break;
-      case Command.MoveWest:
-        robot.AddInstruction(new MoveWestInstruction(predicate, predicateParam, ""));
-        break;
-      case Command.MoveNorth:
-        robot.AddInstruction(new MoveNorthInstruction(predicate, predicateParam, ""));
-        break;
-      case Command.MoveSouth:
-        robot.AddInstruction(new MoveSouthInstruction(predicate, predicateParam, ""));
-        break;
-      case Command.Jump:
-        robot.AddInstruction(new JumpInstruction(predicate, predicateParam, actionParam));
-        break;
-    }
+    // switch(command) {
+    //   case Command.Print:
+    //     robot.AddInstruction(new PrintInstruction(predicate, "", actionParam));
+    //     break;
+    //   case Command.MoveEast:
+    //     robot.AddInstruction(new MoveEastInstruction(predicate, predicateParam, ""));
+    //     break;
+    //   case Command.MoveWest:
+    //     robot.AddInstruction(new MoveWestInstruction(predicate, predicateParam, ""));
+    //     break;
+    //   case Command.MoveNorth:
+    //     robot.AddInstruction(new MoveNorthInstruction(predicate, predicateParam, ""));
+    //     break;
+    //   case Command.MoveSouth:
+    //     robot.AddInstruction(new MoveSouthInstruction(predicate, predicateParam, ""));
+    //     break;
+    //   case Command.Jump:
+    //     robot.AddInstruction(new JumpInstruction(predicate, predicateParam, actionParam));
+    //     break;
+    // }
   }
 
   private static Func<Robot, string, bool> GetPredicate(Predicate predicate) {
@@ -67,4 +66,4 @@ public enum Command {
   MoveWest,
   MoveSouth,
   Jump,
-};
+}

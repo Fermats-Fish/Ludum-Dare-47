@@ -1,5 +1,4 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,23 +10,45 @@ public class Robot : MonoBehaviour {
     public static readonly Vector3 east = new Vector3(1, 0, 0);
     public static readonly Vector3 south = new Vector3(0, -1, 0);
     public static readonly Vector3 west = new Vector3(-1, 0, 0);
+
     public static readonly Vector3[] directions = new Vector3[] { north, east, south, west };
+    public int directionFacing = 0;
 
-    List<Instruction> instructions = new List<Instruction>();
+    // List<Instruction> instructions = new List<Instruction>();
+    List<FunctionInstance> instructions = new List<FunctionInstance>();
 
-    int currentLine = 0;
+    public int currentLine;
     float timeStep = 0;
 
     // Start is called before the first frame update
     protected void Start() {
-        Commander.AddCommand(this, Command.MoveEast, Predicate.Always, "", "");
-        Commander.AddCommand(this, Command.Print, Predicate.Always, "", "First Line");
-        Commander.AddCommand(this, Command.Jump, Predicate.Always, "", "0");
-        Commander.AddCommand(this, Command.Print, Predicate.Always, "", "Final Line");
+        AddInstruction("If LessThan GetXCoordOf GetPosition 0");
+        AddInstruction("TurnRight");
+        AddInstruction("MoveForward");
     }
 
-    public void AddInstruction(Instruction instruction) {
-        instructions.Add(instruction);
+    public void AddInstruction(string instruction) {
+        instructions.Add(
+            FunctionInstance.Compile(this, instruction.Split(' '))
+        );
+    }
+
+    public void TurnLeft() {
+        directionFacing -= 1;
+        if (directionFacing < 0) {
+            directionFacing += 4;
+        }
+    }
+
+    public void TurnRight() {
+        directionFacing += 1;
+        if (directionFacing >= 4) {
+            directionFacing -= 4;
+        }
+    }
+
+    public void MoveForward() {
+        MoveDirection(Robot.directions[directionFacing]);
     }
 
     public void MoveNorth() {
@@ -46,11 +67,6 @@ public class Robot : MonoBehaviour {
         MoveDirection(Robot.west);
     }
 
-    public void SetCurrentLine(int line) {
-        currentLine = line;
-    }
-
-    // Update is called once per frame
     protected void Update() {
         if (timeStep < GameController.instance.timeStep) {
             timeStep += Time.deltaTime;
@@ -64,14 +80,11 @@ public class Robot : MonoBehaviour {
         if (instructions.Count <= 0) {
             return;
         }
-        
-        var instruction = instructions[currentLine];
-        instruction.Run(this);
-        if (instruction is JumpInstruction) {
 
-        } else {
-            currentLine++;
-        }
+        var instruction = instructions[currentLine];
+        instruction.Evaluate();
+
+        currentLine += 1;
 
         if (currentLine >= instructions.Count) {
             currentLine = 0;
@@ -87,7 +100,7 @@ public class Robot : MonoBehaviour {
         direction = Vector3.zero;
     }
 
-    private void MoveDirection(Vector3 direction) {
+    public void MoveDirection(Vector3 direction) {
         target = transform.position + direction;
         target = new Vector3(Mathf.Round(target.x), Mathf.Round(target.y), Mathf.Round(target.z));
     }

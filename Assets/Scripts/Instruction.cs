@@ -1,4 +1,3 @@
-
 using System;
 using UnityEngine;
 
@@ -87,7 +86,7 @@ public class JumpInstruction : Instruction {
     if (predicate.Invoke(robot, predicateParam)) {
       int lineNumber = 0;
       if(Int32.TryParse(actionParam, out lineNumber)) {
-        robot.SetCurrentLine(lineNumber);   
+        robot.currentLine = lineNumber;
       }
     }
   }

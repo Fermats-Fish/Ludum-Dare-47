@@ -1,10 +1,8 @@
-﻿ 
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
-{
+public class Enemy : MonoBehaviour {
     public Vector3 direction = Vector3.zero, target = Vector3.zero;
     public float maxSpeed;
     float speed;
@@ -15,16 +13,14 @@ public class Enemy : MonoBehaviour
     protected static Vector3[] directions = new Vector3[] { north, east, south, west };
 
 
-    void Start()
-    {
+    void Start() {
         direction = RandomDirection();
         transform.position = GameController.instance.RandomPosition();
         target = transform.position;
- 
+
     }
 
-    public void RunProgram()
-    {
+    public void RunProgram() {
 
         transform.position = target;
         target = transform.position + direction;
@@ -32,30 +28,25 @@ public class Enemy : MonoBehaviour
 
     }
 
-    public Vector3 RandomDirection()
-    {
-        return directions[(int)(Random.value * (directions.Length - 0.1f))];
+    public Vector3 RandomDirection() {
+        return directions[(int) (Random.value * (directions.Length - 0.1f))];
     }
 
     // Update is called once per frame
-    protected void Update()
-    {
+    protected void Update() {
 
         speed = Mathf.Min(Vector2.Distance(transform.position, target), 1) * maxSpeed / GameController.instance.timeStep;
         transform.position += speed * direction * Time.deltaTime;
         GameController.instance.CheckBounds(this);
     }
 
-    protected void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("enemy"))
-        {
+    protected void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.gameObject.CompareTag("enemy")) {
             transform.position = Vector3.zero;
             target = Vector3.zero;
             print("death");
         }
-        if (collision.gameObject.CompareTag("wall"))
-        {
+        if (collision.gameObject.CompareTag("wall")) {
             speed = 0;
             transform.position = new Vector3(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y), Mathf.Round(transform.position.z));
             direction = -direction;
@@ -65,4 +56,3 @@ public class Enemy : MonoBehaviour
         }
     }
 }
-
