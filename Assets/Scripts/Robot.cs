@@ -68,7 +68,7 @@ public class Robot : Entity {
 
     protected override void RunProgram() {
 
-        if (currentLine > instructions.Count || currentLine < 0) {
+        if (currentLine >= instructions.Count || currentLine < 0) {
             currentLine = 0;
         }
 
