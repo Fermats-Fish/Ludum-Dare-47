@@ -38,6 +38,7 @@ public class Robot : Entity {
             "TurnDir RandomDir\n" +
             "If Not SolidAt Add GetPos Forwards\n" +
             "MoveForward";
+        // programText = "";
         Compile(programText);
         // AddInstruction("If SolidAt Add GetPosition Forwards");
         // AddInstruction("TurnRight");
@@ -77,6 +78,10 @@ public class Robot : Entity {
     }
 
     protected override void RunProgram() {
+
+        if (instructions.Count == 0) {
+            running = false;
+        }
 
         if (!running) {
             return;
