@@ -11,13 +11,9 @@ public class Function : Evaluatable {
 
     static CoordValue ToRelCoord(Robot robot, (int x, int y) coord) {
 
-        Debug.Log("Found: " + coord);
-
         // First translate based on robot pos.
         coord.x -= robot.curPos.x;
         coord.y -= robot.curPos.y;
-
-        Debug.Log("After Translation: " + coord);
 
         // Now rotate based on robot rot.
 
@@ -35,8 +31,6 @@ public class Function : Evaluatable {
             coord.y = -coord.x;
             coord.x = y;
         }
-
-        Debug.Log("After Rotation: " + coord);
 
         return new CoordValue(coord);
     }
@@ -198,6 +192,7 @@ public class Function : Evaluatable {
             new SlowActionFunc("MoveDirection", 1, (Robot robot, Value[] args) => {
                 robot.MoveDirection(((IntValue) args[0]).value);
             }),
+            new SlowActionFunc("Wait", 0, (Robot robot, Value[] args) => { })
     };
 
     public Function(string name, int numArgs, Func<Robot, Value[], Value> evaluateFunction) {

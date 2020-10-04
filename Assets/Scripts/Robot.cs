@@ -75,8 +75,9 @@ public class Robot : Entity {
 
         if (!instruction.IsSlowAction()) {
             actionsSinceSlowAction += 1;
-            if (actionsSinceSlowAction >= 1000) {
+            if (actionsSinceSlowAction >= 100) {
                 Debug.Log("Infinite loop detected!");
+                actionsSinceSlowAction = 0;
             } else {
                 RunProgram();
             }
