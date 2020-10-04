@@ -29,6 +29,7 @@ public class UIController : MonoBehaviour {
         robotView.SetActive(true);
         programInputField.text = robot.programText;
         compileButtonText.text = "Already Compiled";
+        CameraController.instance.disableKeyboardControls = true;
     }
 
     public void Compile() {
@@ -55,6 +56,7 @@ public class UIController : MonoBehaviour {
     public void DeselectRobot() {
         selectedRobot = null;
         robotView.SetActive(false);
+        CameraController.instance.disableKeyboardControls = false;
     }
 
     void Update() {
