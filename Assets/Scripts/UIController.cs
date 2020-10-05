@@ -96,7 +96,15 @@ public class UIController : MonoBehaviour {
                 // Loop through all functions until this one is contained inside one.
                 foreach (var func in Function.functionsArray) {
                     if (func.name.ToLower().Contains(curWord.ToLower())) {
-                        autoCompleteText.text += func.name + " - " + func.numArgs + " args.";
+                        autoCompleteText.text += func.name;
+                        if (func.numArgs > 0) {
+                            autoCompleteText.text += " (" + func.numArgs + " arg";
+                            if (func.numArgs != 1) {
+                                autoCompleteText.text += "s";
+                            }
+                            autoCompleteText.text += ")";
+                        }
+                        autoCompleteText.text += " - " + func.description;
                         return;
                     }
                 }

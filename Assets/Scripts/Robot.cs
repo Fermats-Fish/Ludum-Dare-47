@@ -40,7 +40,7 @@ public class Robot : Entity {
         base.Start();
 
         programText = "If LessThan 0 GetYCoordOf GetClosest Resource\n" +
-            "Goto 7\n" +
+            "Goto 5\n" +
             "Else\n" +
             "TurnDir RandomDir\n" +
             "Goto 0\n" +
