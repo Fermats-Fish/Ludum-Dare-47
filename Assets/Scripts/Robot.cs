@@ -16,7 +16,7 @@ public class Robot : Entity {
 
     public bool lastIfEvaluated = true;
 
-    public Value[] memory = new Value[] { null, null, null };
+    public Value[] memory = new Value[10];
 
     public string programText { get; protected set; }
     List<FunctionInstance> instructions = new List<FunctionInstance>();

@@ -233,11 +233,19 @@ public class Function : Evaluatable {
                 }
             }, "Returns either -1 or 1, for input into TurnDir"),
             new Function("SetVar", 2, (Robot robot, Value[] args) => {
-                robot.memory[((IntValue) args[0]).value] = args[1];
+                var argumentIndex = ((IntValue) args[0]).value;
+                if (argumentIndex < 0 || robot.memory.Length <= argumentIndex) {
+                    throw new RunTimeError("Variable index of " + argumentIndex + " not a valid index");
+                }
+                robot.memory[argumentIndex] = args[1];
                 return args[1];
-            }, "Sets the value in argument two to the variable of index according to argument one"),
+            }, "Sets the value in argument two to the variable of index according to argument one. Variables must have index between 0 and 9"),
             new Function("GetVar", 1, (Robot robot, Value[] args) => {
-                return robot.memory[((IntValue) args[0]).value];
+                var argumentIndex = ((IntValue) args[0]).value;
+                if (argumentIndex < 0 || robot.memory.Length <= argumentIndex) {
+                    throw new RunTimeError("Variable index of " + argumentIndex + " not a valid index");
+                }
+                return robot.memory[argumentIndex];
             }, "Gets the current value in the variable with index according to the argument of this function"),
 
             // Quick actions
