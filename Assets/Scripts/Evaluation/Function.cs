@@ -131,11 +131,11 @@ public class Function : Evaluatable {
 
                 // Get closest enemy
                 else if (arg.value == 2) {
-                    throw new RunTimeError("GetClosest Enemy is not yet implimented");
+                    return GetClosest(robot, ((int x, int y) c) => GameController.instance.entities.Find(x => x.curPos == c && x is Enemy) != null);
                 }
 
                 throw new RunTimeError("Invalid argument supplied to GetClosest");
-            }, "Returns the absolute coordinates of the closest Resource/Wall"),
+            }, "Returns the absolute coordinates of the closest Resource/Wall/Enemy"),
             new Function("GetBasePos", 0, (Robot robot, Value[] args) => {
                 return new CoordValue(robot.basePos);
             }, "Gives the absolute coordinates of this robot's base"),
