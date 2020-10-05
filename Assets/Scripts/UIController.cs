@@ -28,6 +28,8 @@ public class UIController : MonoBehaviour {
     public Transform scriptingReferenceMenu;
     public GameObject scriptingReferencePrefab;
 
+    public Toggle autoStartToggle;
+
     int caretPos;
 
     void Start() {
@@ -50,7 +52,12 @@ public class UIController : MonoBehaviour {
         selectedRobot = robot;
         robotView.SetActive(true);
         programInputField.text = robot.programText;
+        autoStartToggle.isOn = robot.autoStart;
         UpdateDisplay();
+    }
+
+    public void UpdateAutoStart() {
+        selectedRobot.autoStart = autoStartToggle.isOn;
     }
 
     public void OnLeftButtonClick() {

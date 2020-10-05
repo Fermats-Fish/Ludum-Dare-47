@@ -26,6 +26,8 @@ public class Robot : Entity {
     public bool error = false;
     public bool destroyed = false;
 
+    public bool autoStart = false;
+
     SpriteRenderer sr;
 
     public string lastErrorMessage;
@@ -174,6 +176,10 @@ public class Robot : Entity {
                 // Also drop off any resource we are carrying.
                 if (hasResource) {
                     OnResourceDropOff();
+                }
+
+                if (autoStart) {
+                    TurnOn();
                 }
 
                 if (UIController.instance.selectedRobot == this) {
