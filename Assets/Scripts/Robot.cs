@@ -192,6 +192,12 @@ public class Robot : Entity {
 
     }
 
+    void OnMouseDown() {
+        if (!running) {
+            UIController.instance.SelectRobot(this);
+        }
+    }
+
     public void GoHome() {
         target = basePos;
         GoToTarget();
