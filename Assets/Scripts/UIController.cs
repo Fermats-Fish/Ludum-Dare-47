@@ -23,6 +23,10 @@ public class UIController : MonoBehaviour {
 
     public Text spawnResourcesButtonText;
 
+    public GameObject scriptingReferenceRoot;
+    public Transform scriptingReferenceMenu;
+    public GameObject scriptingReferencePrefab;
+
     int caretPos;
 
     void Start() {
@@ -32,6 +36,12 @@ public class UIController : MonoBehaviour {
         instance = this;
         UpdateResourcesDisplay();
         spawnResourcesButtonText.text = "Spawn Resources - $" + GameController.SPAWN_RESOURCES_COST;
+
+        // Init scripting reference.
+        foreach (var function in Function.functionsArray) {
+            var text = Instantiate(scriptingReferencePrefab, scriptingReferenceMenu).GetComponent<Text>();
+            text.text = function.GetDocumentation();
+        }
     }
 
     public void SelectRobot(Robot robot) {
@@ -148,15 +158,7 @@ public class UIController : MonoBehaviour {
                 // Loop through all functions until this one is contained inside one.
                 foreach (var func in Function.functionsArray) {
                     if (func.name.ToLower().Contains(curWord.ToLower())) {
-                        autoCompleteText.text += func.name;
-                        if (func.numArgs > 0) {
-                            autoCompleteText.text += " (" + func.numArgs + " arg";
-                            if (func.numArgs != 1) {
-                                autoCompleteText.text += "s";
-                            }
-                            autoCompleteText.text += ")";
-                        }
-                        autoCompleteText.text += " - " + func.description;
+                        autoCompleteText.text += func.GetDocumentation();
                         return;
                     }
                 }
@@ -171,5 +173,11 @@ public class UIController : MonoBehaviour {
             GameController.Money -= GameController.SPAWN_RESOURCES_COST;
             GameController.instance.SpawnExtraResources();
         }
+    }
+
+    public void ToggleScriptingReference() {
+        var wasOpen = scriptingReferenceRoot.activeInHierarchy;
+        scriptingReferenceRoot.SetActive(!wasOpen);
+        CameraController.instance.DisableMouseControls = !wasOpen;
     }
 }

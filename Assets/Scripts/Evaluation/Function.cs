@@ -12,6 +12,19 @@ public class Function : Evaluatable {
 
     public static Dictionary<string, Function> functions = new Dictionary<string, Function>();
 
+    public string GetDocumentation() {
+        string docs = name;
+        if (numArgs > 0) {
+            docs += " (" + numArgs + " arg";
+            if (numArgs != 1) {
+                docs += "s";
+            }
+            docs += ")";
+        }
+        docs += " - " + description;
+        return docs;
+    }
+
     static(int x, int y) ToRelCoord(Robot robot, (int x, int y) coord) {
 
         // First translate based on robot pos.

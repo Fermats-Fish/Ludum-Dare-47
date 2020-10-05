@@ -15,6 +15,19 @@ public class CameraController : MonoBehaviour {
 
 	public static CameraController instance;
 
+	bool disableMouseControls = false;
+	public bool DisableMouseControls {
+		get {
+			return disableMouseControls;
+		}
+		set {
+			disableMouseControls = value;
+			if (disableMouseControls) {
+				StopDrag();
+			}
+		}
+	}
+
 	void Start() {
 		if (instance != null) {
 			Debug.LogError("Can't have two camera controllers!");
@@ -33,24 +46,28 @@ public class CameraController : MonoBehaviour {
 			}
 		}
 
-		float scroll = Input.GetAxis("Mouse ScrollWheel");
+		if (!disableMouseControls) {
 
-		if (scroll != 0) {
-			Camera.main.orthographicSize -= Camera.main.orthographicSize * ZOOM_SPEED * scroll;
-		}
+			float scroll = Input.GetAxis("Mouse ScrollWheel");
 
-		// When the mouse button is pressed down, store where it was pressed.
-		if (Input.GetMouseButtonDown(2) || (Input.GetMouseButtonDown(1) && lockDragging == false)) {
-			StartDrag();
-		}
+			if (scroll != 0) {
+				Camera.main.orthographicSize -= Camera.main.orthographicSize * ZOOM_SPEED * scroll;
+			}
 
-		// When the mouse is dragged move the camera to make sure the mouse is still pointing to the same world coordinate.
-		if (dragging == true) {
-			ContinueDrag();
-		}
+			// When the mouse button is pressed down, store where it was pressed.
+			if (Input.GetMouseButtonDown(2) || (Input.GetMouseButtonDown(1) && lockDragging == false)) {
+				StartDrag();
+			}
 
-		if (Input.GetMouseButtonUp(1) || Input.GetMouseButtonUp(2)) {
-			StopDrag();
+			// When the mouse is dragged move the camera to make sure the mouse is still pointing to the same world coordinate.
+			if (dragging == true) {
+				ContinueDrag();
+			}
+
+			if (Input.GetMouseButtonUp(1) || Input.GetMouseButtonUp(2)) {
+				StopDrag();
+			}
+
 		}
 
 	}
