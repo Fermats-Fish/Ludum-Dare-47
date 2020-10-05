@@ -22,6 +22,7 @@ public class UIController : MonoBehaviour {
     public Text resourcesText;
 
     public Text spawnResourcesButtonText;
+    public Text buyRobotButtonText;
 
     public GameObject scriptingReferenceRoot;
     public Transform scriptingReferenceMenu;
@@ -36,6 +37,7 @@ public class UIController : MonoBehaviour {
         instance = this;
         UpdateResourcesDisplay();
         spawnResourcesButtonText.text = "Spawn Resources - $" + GameController.SPAWN_RESOURCES_COST;
+        buyRobotButtonText.text = "Buy Robot - $" + GameController.BUY_ROBOT_COST;
 
         // Init scripting reference.
         foreach (var function in Function.functionsArray) {
@@ -172,6 +174,13 @@ public class UIController : MonoBehaviour {
         if (GameController.SPAWN_RESOURCES_COST <= GameController.Money) {
             GameController.Money -= GameController.SPAWN_RESOURCES_COST;
             GameController.instance.SpawnExtraResources();
+        }
+    }
+
+    public void BuyRobot() {
+        if (GameController.BUY_ROBOT_COST <= GameController.Money) {
+            GameController.Money -= GameController.BUY_ROBOT_COST;
+            GameController.instance.SpawnRobot();
         }
     }
 

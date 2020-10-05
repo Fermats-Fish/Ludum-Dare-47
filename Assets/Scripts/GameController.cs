@@ -8,6 +8,7 @@ public class GameController : MonoBehaviour {
     public Base playerBase;
 
     public const int SPAWN_RESOURCES_COST = 30;
+    public const int BUY_ROBOT_COST = 50;
 
     private static int score = 0;
     public static int Score {
