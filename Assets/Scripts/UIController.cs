@@ -33,7 +33,6 @@ public class UIController : MonoBehaviour {
         robotView.SetActive(true);
         programInputField.text = robot.programText;
         compileButtonText.text = "Already Compiled";
-        CameraController.instance.disableKeyboardControls = true;
         UpdateDisplay();
     }
 
@@ -59,6 +58,7 @@ public class UIController : MonoBehaviour {
     }
 
     public void UpdateDisplay() {
+        CameraController.instance.disableKeyboardControls = !selectedRobot.running;
         programInputField.readOnly = selectedRobot.running;
         startButton.interactable = !selectedRobot.running;
         compileButton.interactable = !selectedRobot.running;
