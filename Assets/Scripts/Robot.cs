@@ -45,15 +45,21 @@ public class Robot : Entity {
 
         base.Start();
 
+        // programText = "If LessThan 0 GetYCoordOf ToRelCoord GetClosest Resource\n" +
+        //     "Goto 5\n" +
+        //     "Else\n" +
+        //     "TurnDir RandomDir\n" +
+        //     "Goto 0\n" +
+        //     "If SolidAt Add GetPos Forwards\n" +
+        //     "TurnDir RandomDir\n" +
+        //     "If Not SolidAt Add GetPos Forwards\n" +
+        //     "MoveForward";
+
         programText = "If LessThan 0 GetYCoordOf ToRelCoord GetClosest Resource\n" +
-            "Goto 5\n" +
+            "MoveForward\n" +
             "Else\n" +
-            "TurnDir RandomDir\n" +
-            "Goto 0\n" +
-            "If SolidAt Add GetPos Forwards\n" +
-            "TurnDir RandomDir\n" +
-            "If Not SolidAt Add GetPos Forwards\n" +
-            "MoveForward";
+            "TurnDir RandomDir\n";
+
         // programText = "";
 
         Compile(programText);

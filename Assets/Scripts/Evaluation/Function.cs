@@ -210,6 +210,12 @@ public class Function : Evaluatable {
             new Function("Not", 1, (Robot Robot, Value[] args) => {
                 return new BoolValue(!((BoolValue) args[0]).value);
             }, "Takes a boolean value to its opposite"),
+            new Function("And", 2, (Robot robot, Value[] args) => {
+                return new BoolValue(((BoolValue) args[0]).value && ((BoolValue) args[1]).value);
+            }, "Returns true if the two supplied arguments are true (e.g. And True True returns True)"),
+            new Function("Or", 2, (Robot robot, Value[] args) => {
+                return new BoolValue(((BoolValue) args[0]).value || ((BoolValue) args[1]).value);
+            }, "Returns true if one of the two supplied arguments are true (e.g. And Or False returns True)"),
             new Function("Coord", 2, (Robot Robot, Value[] args) => {
                 return new CoordValue(
                     ((IntValue) args[0]).value,
