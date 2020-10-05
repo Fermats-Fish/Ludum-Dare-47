@@ -38,8 +38,9 @@ public class GameController : MonoBehaviour {
 
     public GameObject robotPrefab, floorPrefab, wallPrefab, resourcePrefab, enemyPrefab, basePrefab;
 
-    public(int x, int y) gridSize = (20, 20);
-    int wallCount = 40, resourceCount = 3;
+    public(int x, int y) gridSize = (30, 30);
+    const float wallDensity = 0.1f;
+    const int resourceCount = 3;
 
     public Dictionary < (int, int), Wall > walls = new Dictionary < (int, int), Wall > ();
 
@@ -89,6 +90,7 @@ public class GameController : MonoBehaviour {
             }
         }
 
+        var wallCount = (int) (gridSize.x * gridSize.y * wallDensity);
         for (int i = 0; i < wallCount; i++) {
             var pos = RandomEmptyPos();
             if (!walls.ContainsKey(pos)) {
