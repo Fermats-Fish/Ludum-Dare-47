@@ -21,6 +21,8 @@ public class UIController : MonoBehaviour {
 
     public Text resourcesText;
 
+    public Text spawnResourcesButtonText;
+
     int caretPos;
 
     void Start() {
@@ -29,6 +31,7 @@ public class UIController : MonoBehaviour {
         }
         instance = this;
         UpdateResourcesDisplay();
+        spawnResourcesButtonText.text = "Spawn Resources - $" + GameController.SPAWN_RESOURCES_COST;
     }
 
     public void SelectRobot(Robot robot) {
@@ -160,6 +163,13 @@ public class UIController : MonoBehaviour {
                 autoCompleteText.text += "No function containing the text: " + curWord;
             }
 
+        }
+    }
+
+    public void SpawnResources() {
+        if (GameController.SPAWN_RESOURCES_COST <= GameController.Money) {
+            GameController.Money -= GameController.SPAWN_RESOURCES_COST;
+            GameController.instance.SpawnExtraResources();
         }
     }
 }

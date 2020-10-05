@@ -7,6 +7,8 @@ public class GameController : MonoBehaviour {
 
     public Base playerBase;
 
+    public const int SPAWN_RESOURCES_COST = 30;
+
     private static int score = 0;
     public static int Score {
         get {
@@ -50,6 +52,13 @@ public class GameController : MonoBehaviour {
         SpawnRobot();
     }
 
+    public void SpawnExtraResources() {
+        for (int i = 0; i < resourceCount; i++) {
+            SpawnResource();
+        }
+        SpawnEnemy();
+    }
+
     public Vector3 TileToWorldCoord((int x, int y) coord) {
         return TileToWorldCoord(coord.x, coord.y);
     }
@@ -83,7 +92,9 @@ public class GameController : MonoBehaviour {
             }
         }
 
-        SpawnResource();
+        for (int i = 0; i < resourceCount; i++) {
+            SpawnResource();
+        }
 
     }
 
@@ -101,10 +112,8 @@ public class GameController : MonoBehaviour {
     }
 
     public void SpawnResource() {
-        for (int i = 0; i < resourceCount; i++) {
-            var pos = RandomEmptyPos();
-            SpawnResourceAt(pos);
-        }
+        var pos = RandomEmptyPos();
+        SpawnResourceAt(pos);
     }
 
     public void SpawnResourceAt((int x, int y) pos) {
@@ -171,6 +180,10 @@ public class GameController : MonoBehaviour {
         var rBase = Instantiate(basePrefab, TileToWorldCoord(robot.basePos), Quaternion.identity).GetComponent<Base>();
         rBase.robot = robot;
         return robot;
+    }
+
+    public void SpawnEnemy() {
+        Instantiate(enemyPrefab).GetComponent<Enemy>();
     }
 
     public(int, int) RandomPosition() {
