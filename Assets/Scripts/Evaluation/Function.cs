@@ -12,7 +12,7 @@ public class Function : Evaluatable {
 
     public static Dictionary<string, Function> functions = new Dictionary<string, Function>();
 
-    static CoordValue ToRelCoord(Robot robot, (int x, int y) coord) {
+    static(int x, int y) ToRelCoord(Robot robot, (int x, int y) coord) {
 
         // First translate based on robot pos.
         coord.x -= robot.curPos.x;
@@ -35,7 +35,7 @@ public class Function : Evaluatable {
             coord.x = y;
         }
 
-        return new CoordValue(GameController.BoundRelPos(coord));
+        return GameController.BoundRelPos(coord);
     }
 
     static(int x, int y) FromRelCoord(Robot robot, (int x, int y) coord) {
@@ -66,7 +66,7 @@ public class Function : Evaluatable {
 
     static CoordValue GetClosest(Robot robot, Func < (int, int), bool > predicate) {
         if (predicate(robot.curPos)) {
-            return new CoordValue(0, 0);
+            return new CoordValue(robot.curPos);
         }
         int range = 0;
         while (true) {
@@ -77,7 +77,7 @@ public class Function : Evaluatable {
                     // This is a relative coordinate. We need to convert from it to a real coord.
                     var coord = FromRelCoord(robot, (x, y));
                     if (predicate(coord)) {
-                        return new CoordValue(GameController.BoundRelPos(x, y));
+                        return new CoordValue(coord);
                     }
                 }
             }
@@ -122,10 +122,10 @@ public class Function : Evaluatable {
                 }
 
                 throw new RunTimeError("Invalid argument supplied to GetClosest");
-            }, "Returns the relative coordinates of the closest Resource/Wall"),
+            }, "Returns the absolute coordinates of the closest Resource/Wall"),
             new Function("GetBasePos", 0, (Robot robot, Value[] args) => {
-                return ToRelCoord(robot, robot.basePos);
-            }, "Gives the relative coordinates of this robot's base"),
+                return new CoordValue(robot.basePos);
+            }, "Gives the absolute coordinates of this robot's base"),
             new Function("SolidAt", 1, (Robot robot, Value[] args) => {
                 var coord = (CoordValue) args[0];
                 return new BoolValue(GameController.instance.walls.ContainsKey((coord.x, coord.y)));
@@ -135,6 +135,14 @@ public class Function : Evaluatable {
             }, "Returns whether or not the robot is currently carrying a resource"),
 
             // Functions
+            new Function("ToRelCoord", 1, (Robot robot, Value[] args) => {
+                var coord = (CoordValue) args[0];
+                return new CoordValue(ToRelCoord(robot, (coord.x, coord.y)));
+            }, "Converts absolute coordinates to coordinates relative to the robot's position and rotation"),
+            new Function("ToAbsCoord", 1, (Robot robot, Value[] args) => {
+                var coord = (CoordValue) args[0];
+                return new CoordValue(FromRelCoord(robot, (coord.x, coord.y)));
+            }, "Converts relative coordinates to absolute coordinates"),
             new Function("Add", 2, (Robot robot, Value[] args) => {
                 if (args[0] is CoordValue && args[1] is CoordValue) {
                     var coord1 = (CoordValue) args[0];

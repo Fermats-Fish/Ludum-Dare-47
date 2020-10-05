@@ -41,7 +41,7 @@ public class Robot : Entity {
 
         base.Start();
 
-        programText = "If LessThan 0 GetYCoordOf GetClosest Resource\n" +
+        programText = "If LessThan 0 GetYCoordOf ToRelCoord GetClosest Resource\n" +
             "Goto 5\n" +
             "Else\n" +
             "TurnDir RandomDir\n" +
@@ -143,6 +143,10 @@ public class Robot : Entity {
                 // Also drop off any resource we are carrying.
                 if (hasResource) {
                     hasResource = false;
+                }
+
+                if (UIController.instance.selectedRobot == this) {
+                    UIController.instance.UpdateDisplay();
                 }
             }
         }
