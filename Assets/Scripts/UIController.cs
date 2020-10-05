@@ -8,12 +8,16 @@ public class UIController : MonoBehaviour {
 
     public static UIController instance;
 
-    Robot selectedRobot = null;
+    public Robot selectedRobot { get; protected set; }
 
     public GameObject robotView;
     public InputField programInputField;
+    public Button compileButton;
     public Text compileButtonText;
     public Text autoCompleteText;
+    public Button startButton;
+    public Text startButtonText;
+    public Image startButtonImage;
 
     int caretPos;
 
@@ -30,6 +34,7 @@ public class UIController : MonoBehaviour {
         programInputField.text = robot.programText;
         compileButtonText.text = "Already Compiled";
         CameraController.instance.disableKeyboardControls = true;
+        UpdateDisplay();
     }
 
     public void Compile() {
@@ -50,7 +55,30 @@ public class UIController : MonoBehaviour {
 
     public void StartRobot() {
         selectedRobot.TurnOn();
-        DeselectRobot();
+        UpdateDisplay();
+    }
+
+    public void UpdateDisplay() {
+        programInputField.readOnly = selectedRobot.running;
+        startButton.interactable = !selectedRobot.running;
+        compileButton.interactable = !selectedRobot.running;
+        string statusText;
+        Color color;
+        if (selectedRobot.running) {
+            if (selectedRobot.error) {
+                autoCompleteText.text = selectedRobot.lastErrorMessage;
+                statusText = "Error";
+                color = new Color(1f, 0.5f, 0.5f);
+            } else {
+                statusText = "Running";
+                color = new Color(0.5f, 1f, 0.5f);
+            }
+        } else {
+            statusText = "Start Robot";
+            color = new Color(0.7f, 0.7f, 1f);
+        }
+        startButtonText.text = statusText;
+        startButtonImage.color = color;
     }
 
     public void DeselectRobot() {

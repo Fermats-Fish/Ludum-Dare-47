@@ -790,8 +790,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   robotView: {fileID: 378605074}
   programInputField: {fileID: 1791433979}
+  compileButton: {fileID: 1352063406}
   compileButtonText: {fileID: 1004714928}
   autoCompleteText: {fileID: 1387758616}
+  startButton: {fileID: 1130318703}
+  startButtonText: {fileID: 1196891791}
+  startButtonImage: {fileID: 1130318704}
 --- !u!1 &1069208811
 GameObject:
   m_ObjectHideFlags: 0
@@ -932,7 +936,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1138,7 +1142,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:

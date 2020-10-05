@@ -20,9 +20,11 @@ public class Robot : Entity {
 
     bool hasResource = false;
 
-    bool error = false;
+    public bool error = false;
 
     SpriteRenderer sr;
+
+    public string lastErrorMessage;
 
     public static readonly Quaternion[] rotations = new Quaternion[] {
         Quaternion.Euler(0f, 0f, 0f),
@@ -158,11 +160,9 @@ public class Robot : Entity {
         try {
             instruction.Evaluate();
         } catch (RunTimeError e) {
-            Debug.Log("Runtime error: " + e.Message + "!");
-            error = true;
-        } catch (System.Exception e) {
-            Debug.Log("Runtime error!");
-            error = true;
+            OnError("Runtime error: " + e.Message + "!");
+        } catch {
+            OnError("Runtime error!");
         }
 
         currentLine += 1;
@@ -178,8 +178,7 @@ public class Robot : Entity {
         // Finishing off (only run once) section.
         else {
             if (actionsSinceSlowAction >= 100) {
-                Debug.Log("Infinite loop detected! - Line " + currentLine);
-                error = true;
+                OnError("Infinite loop detected!");
             }
             actionsSinceSlowAction = 0;
 
@@ -192,10 +191,16 @@ public class Robot : Entity {
 
     }
 
-    void OnMouseDown() {
-        if (!running) {
-            UIController.instance.SelectRobot(this);
+    void OnError(string message) {
+        error = true;
+        lastErrorMessage = currentLine + ": " + message;
+        if (UIController.instance.selectedRobot == this) {
+            UIController.instance.UpdateDisplay();
         }
+    }
+
+    void OnMouseDown() {
+        UIController.instance.SelectRobot(this);
     }
 
     public void GoHome() {

@@ -49,6 +49,7 @@ MonoBehaviour:
   running: 1
   directionFacing: 3
   lastIfEvaluated: 1
+  error: 0
   currentLine: 0
 --- !u!212 &6345408860415604639
 SpriteRenderer:
@@ -122,7 +123,7 @@ BoxCollider2D:
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_AutoTiling: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
