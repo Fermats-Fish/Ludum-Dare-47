@@ -170,14 +170,15 @@ public class Robot : Entity {
         transform.rotation = rotations[directionFacing];
 
         // Recursive section.
-        if (!instruction.IsSlowAction() && !error && actionsSinceSlowAction < 100) {
+        int recurseLimit = Random.Range(100, 200);
+        if (!instruction.IsSlowAction() && !error && actionsSinceSlowAction < recurseLimit) {
             actionsSinceSlowAction += 1;
             RunProgram();
         }
 
         // Finishing off (only run once) section.
         else {
-            if (actionsSinceSlowAction >= 100) {
+            if (actionsSinceSlowAction >= recurseLimit) {
                 OnError("Infinite loop detected!");
             }
             actionsSinceSlowAction = 0;
