@@ -12,8 +12,8 @@ public class UIController : MonoBehaviour {
 
     public GameObject robotView;
     public InputField programInputField;
-    public Button compileButton;
-    public Text compileButtonText;
+    public Button leftButton;
+    public Text leftButtonText;
     public Text autoCompleteText;
     public Button startButton;
     public Text startButtonText;
@@ -35,36 +35,43 @@ public class UIController : MonoBehaviour {
         selectedRobot = robot;
         robotView.SetActive(true);
         programInputField.text = robot.programText;
-        compileButtonText.text = "Already Compiled";
         UpdateDisplay();
+    }
+
+    public void OnLeftButtonClick() {
+        if (selectedRobot.running) {
+            // Salvage
+            selectedRobot.Rescue();
+        } else {
+            // Compile
+            Compile();
+        }
     }
 
     public void Compile() {
         try {
             selectedRobot.Compile(programInputField.text);
-            compileButtonText.text = "Compiled Successfully";
+            leftButtonText.text = "Compiled Successfully";
         } catch (CompileError error) {
-            compileButtonText.text = error.Message;
+            leftButtonText.text = error.Message;
         } catch {
-            compileButtonText.text = "Compile Error!";
+            leftButtonText.text = "Compile Error!";
         }
     }
 
     public void OnTypeProgram() {
-        compileButtonText.text = "Compile";
+        leftButtonText.text = "Compile";
         Compile();
     }
 
     public void StartRobot() {
         selectedRobot.TurnOn();
-        UpdateDisplay();
     }
 
     public void UpdateDisplay() {
         CameraController.instance.disableKeyboardControls = !selectedRobot.running;
         programInputField.readOnly = selectedRobot.running;
         startButton.interactable = !selectedRobot.running;
-        compileButton.interactable = !selectedRobot.running;
         string statusText;
         Color color;
         if (selectedRobot.running) {
@@ -82,10 +89,17 @@ public class UIController : MonoBehaviour {
         }
         startButtonText.text = statusText;
         startButtonImage.color = color;
+        leftButtonText.text = selectedRobot.running ? "Rescue Robot - $" + selectedRobot.GetRescueCost() : "Already Compiled";
+        UpdateLeftButtonClickable();
+    }
+
+    public void UpdateLeftButtonClickable() {
+        leftButton.interactable = selectedRobot != null && (!selectedRobot.running || selectedRobot.GetRescueCost() <= GameController.Money);
     }
 
     public void UpdateResourcesDisplay() {
         resourcesText.text = "Score: " + GameController.Score + "\n" + "Money: $" + GameController.Money;
+        UpdateLeftButtonClickable();
     }
 
     public void DeselectRobot() {

@@ -102,12 +102,16 @@ public class GameController : MonoBehaviour {
 
     public void SpawnResource() {
         for (int i = 0; i < resourceCount; i++) {
-            Resource resource = Instantiate(resourcePrefab).GetComponent<Resource>();
             var pos = RandomEmptyPos();
-            Vector3 worldPos = TileToWorldCoord(pos);
-            resource.transform.position = worldPos;
-            resources.Add(pos, resource);
+            SpawnResourceAt(pos);
         }
+    }
+
+    public void SpawnResourceAt((int x, int y) pos) {
+        Resource resource = Instantiate(resourcePrefab).GetComponent<Resource>();
+        Vector3 worldPos = TileToWorldCoord(pos);
+        resource.transform.position = worldPos;
+        resources.Add(pos, resource);
     }
 
     public static(int x, int y) Bound(int x, int y) {

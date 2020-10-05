@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Robot : Entity {
 
+    public const int baseRescueCost = 10;
+    public const int fixCost = 20;
+
     bool ignition = false;
     public bool running = false;
     int actionsSinceSlowAction = 0;
@@ -77,17 +80,23 @@ public class Robot : Entity {
         programText = program;
     }
 
+    public int GetRescueCost() {
+        return Robot.baseRescueCost + (destroyed ? Robot.fixCost : 0);
+    }
+
     static readonly Color resourceColor = new Color(0.7f, 0.7f, 0f);
     static readonly Color normalColor = new Color(91 / 255f, 87 / 255f, 245 / 255f);
     static readonly Color errorColor = new Color(1f, 20 / 255f, 30 / 255f);
 
     public void UpdateColor() {
-        if (error) {
-            sr.color = errorColor;
-        } else if (hasResource) {
-            sr.color = resourceColor;
-        } else {
-            sr.color = normalColor;
+        if (sr != null) {
+            if (error) {
+                sr.color = errorColor;
+            } else if (hasResource) {
+                sr.color = resourceColor;
+            } else {
+                sr.color = normalColor;
+            }
         }
     }
 
@@ -219,16 +228,44 @@ public class Robot : Entity {
         UIController.instance.SelectRobot(this);
     }
 
+    public void Rescue() {
+        // First check we have the cash.
+        if (GameController.Money >= GetRescueCost()) {
+            // Pay
+            GameController.Money -= GetRescueCost();
+
+            // If broken, fix.
+            destroyed = false;
+
+            // Drop resource if we have one.
+            if (hasResource) {
+                hasResource = false;
+                GameController.instance.SpawnResourceAt(curPos);
+            }
+
+            // Go home.
+            GoHome();
+        }
+    }
+
     public void GoHome() {
         target = basePos;
+        direction = Vector3.zero;
         GoToTarget();
         running = false;
+        if (UIController.instance != null && UIController.instance.selectedRobot == this) {
+            UIController.instance.UpdateDisplay();
+        }
+        UpdateColor();
     }
 
     public void TurnOn() {
         currentLine = 0;
         running = true;
         ignition = true;
+        if (UIController.instance.selectedRobot == this) {
+            UIController.instance.UpdateDisplay();
+        }
     }
 
     public override void Die() {
