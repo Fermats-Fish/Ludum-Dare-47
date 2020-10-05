@@ -30,6 +30,12 @@ public class UIController : MonoBehaviour {
 
     public Toggle autoStartToggle;
 
+    public Slider slider;
+    public Text timeScaleText;
+
+    public Toggle pausedToggle;
+    public Text pausedToggleText;
+
     int caretPos;
 
     void Start() {
@@ -46,6 +52,8 @@ public class UIController : MonoBehaviour {
             var text = Instantiate(scriptingReferencePrefab, scriptingReferenceMenu).GetComponent<Text>();
             text.text = function.GetDocumentation();
         }
+
+        UpdateTimeScale();
     }
 
     public void SelectRobot(Robot robot) {
@@ -182,6 +190,13 @@ public class UIController : MonoBehaviour {
             GameController.Money -= GameController.SPAWN_RESOURCES_COST;
             GameController.instance.SpawnExtraResources();
         }
+    }
+
+    public void UpdateTimeScale() {
+        float scale = slider.value / 4f;
+        Time.timeScale = pausedToggle.isOn ? 0 : scale;
+        timeScaleText.text = "Time Scale: " + scale + "x";
+        pausedToggleText.text = pausedToggle.isOn ? "Paused" : "Pause";
     }
 
     public void BuyRobot() {
