@@ -44,6 +44,7 @@ public class GameController : MonoBehaviour {
     const int resourceCount = 3;
 
     public Dictionary < (int, int), Wall > walls = new Dictionary < (int, int), Wall > ();
+    public HashSet < (int, int) > bases = new HashSet < (int, int) > ();
 
     // Start is called before the first frame update
     void Start() {
@@ -58,6 +59,71 @@ public class GameController : MonoBehaviour {
         var pos = robot.transform.position;
         pos.z = -1000;
         CameraController.instance.transform.position = pos;
+
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
+        SpawnEnemy();
     }
 
     public void SpawnExtraResources() {
@@ -110,7 +176,7 @@ public class GameController : MonoBehaviour {
     public(int x, int y) RandomEmptyPos() {
         int tries = 0;
         var pos = RandomPosition();
-        while ((walls.ContainsKey(pos) || resources.ContainsKey(pos)) && tries < 100) {
+        while ((walls.ContainsKey(pos) || resources.ContainsKey(pos) || bases.Contains(pos)) && tries < 100) {
             pos = RandomPosition();
             tries++;
         }
@@ -184,6 +250,7 @@ public class GameController : MonoBehaviour {
     public Robot SpawnRobot() {
         Robot robot = Instantiate(robotPrefab).GetComponent<Robot>();
         robot.basePos = RandomEmptyPos();
+        bases.Add(robot.basePos);
         robot.directionFacing = Random.Range(0, 4);
         robot.GoHome();
         var rBase = Instantiate(basePrefab, TileToWorldCoord(robot.basePos), Quaternion.identity).GetComponent<Base>();

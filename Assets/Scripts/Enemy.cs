@@ -13,5 +13,9 @@ public class Enemy : Entity {
 
     protected override void RunProgram() {
         MoveDirection(Random.Range(0, 4));
+        if (GameController.instance.bases.Contains(target)) {
+            target = curPos;
+            direction = Vector3.zero;
+        }
     }
 }

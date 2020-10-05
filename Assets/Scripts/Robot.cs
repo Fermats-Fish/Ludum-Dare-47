@@ -162,6 +162,8 @@ public class Robot : Entity {
 
         if (destroyed) {
             OnError("Robot was destroyed");
+            UpdateColor();
+            return;
         }
 
         if (instructions.Count == 0) {

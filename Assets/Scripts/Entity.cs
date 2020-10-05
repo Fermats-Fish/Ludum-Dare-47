@@ -23,10 +23,16 @@ public class Entity : MonoBehaviour {
 
     public void TakeStep() {
         direction = Vector3.zero;
+        GoToTarget();
         if (GameController.instance.entities.Find(x => x is Enemy && x.curPos == curPos && x != this) != null) {
             Die();
         }
-        GoToTarget();
+        if (this is Enemy) {
+            var other = GameController.instance.entities.Find(x => x.curPos == curPos && x != this);
+            if (other != null) {
+                other.Die();
+            }
+        }
         RunProgram();
     }
 
@@ -55,7 +61,5 @@ public class Entity : MonoBehaviour {
         }
     }
 
-    public virtual void Die() {
-        Debug.Log("Death");
-    }
+    public virtual void Die() { }
 }
