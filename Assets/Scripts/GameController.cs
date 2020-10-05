@@ -7,6 +7,27 @@ public class GameController : MonoBehaviour {
 
     public Base playerBase;
 
+    private static int score = 0;
+    public static int Score {
+        get {
+            return score;
+        }
+        set {
+            score = value;
+            UIController.instance.UpdateResourcesDisplay();
+        }
+    }
+    private static int money = 100;
+    public static int Money {
+        get {
+            return money;
+        }
+        set {
+            money = value;
+            UIController.instance.UpdateResourcesDisplay();
+        }
+    }
+
     public List<Entity> entities;
 
     public Dictionary < (int, int), Resource > resources = new Dictionary < (int, int), Resource > ();

@@ -21,6 +21,7 @@ public class Robot : Entity {
     bool hasResource = false;
 
     public bool error = false;
+    public bool destroyed = false;
 
     SpriteRenderer sr;
 
@@ -127,9 +128,19 @@ public class Robot : Entity {
         MoveDirection(directionFacing);
     }
 
+    void OnResourceDropOff() {
+        hasResource = false;
+        GameController.Score += 10;
+        GameController.Money += 100;
+    }
+
     protected override void RunProgram() {
 
         error = false;
+
+        if (destroyed) {
+            OnError("Robot was destroyed");
+        }
 
         if (instructions.Count == 0) {
             running = false;
@@ -142,7 +153,7 @@ public class Robot : Entity {
 
                 // Also drop off any resource we are carrying.
                 if (hasResource) {
-                    hasResource = false;
+                    OnResourceDropOff();
                 }
 
                 if (UIController.instance.selectedRobot == this) {
@@ -221,6 +232,6 @@ public class Robot : Entity {
     }
 
     public override void Die() {
-        GoHome();
+        destroyed = true;
     }
 }

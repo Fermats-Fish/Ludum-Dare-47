@@ -19,6 +19,8 @@ public class UIController : MonoBehaviour {
     public Text startButtonText;
     public Image startButtonImage;
 
+    public Text resourcesText;
+
     int caretPos;
 
     void Start() {
@@ -26,6 +28,7 @@ public class UIController : MonoBehaviour {
             throw new System.Exception("Can't have two UI Controllers");
         }
         instance = this;
+        UpdateResourcesDisplay();
     }
 
     public void SelectRobot(Robot robot) {
@@ -79,6 +82,10 @@ public class UIController : MonoBehaviour {
         }
         startButtonText.text = statusText;
         startButtonImage.color = color;
+    }
+
+    public void UpdateResourcesDisplay() {
+        resourcesText.text = "Score: " + GameController.Score + "\n" + "Money: $" + GameController.Money;
     }
 
     public void DeselectRobot() {
