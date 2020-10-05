@@ -59,6 +59,11 @@ public class Robot : Entity {
         Compile(programText);
 
         UpdateColor();
+
+        // Force the rest of the update.
+        if (UIController.instance.selectedRobot == this) {
+            UIController.instance.SelectRobot(this);
+        }
     }
 
     public void Compile(string program) {
@@ -140,7 +145,7 @@ public class Robot : Entity {
     void OnResourceDropOff() {
         hasResource = false;
         GameController.Score += 10;
-        GameController.Money += 100;
+        GameController.Money += 30;
     }
 
     protected override void RunProgram() {

@@ -49,7 +49,13 @@ public class GameController : MonoBehaviour {
             instance = this;
         }
         InitGrid();
-        SpawnRobot();
+        var robot = SpawnRobot();
+        UIController.instance.SelectRobot(robot);
+
+        // Center camera on starting robot.
+        var pos = robot.transform.position;
+        pos.z = -1000;
+        CameraController.instance.transform.position = pos;
     }
 
     public void SpawnExtraResources() {
